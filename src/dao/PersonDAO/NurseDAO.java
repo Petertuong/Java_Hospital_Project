@@ -1,0 +1,179 @@
+package dao.PersonDAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import dao.DAOInterface;
+import dao.MapperUtil;
+import model.Staff.Nurse;
+import util.DBConnect;
+
+public class NurseDAO implements DAOInterface<Nurse, Integer> {
+
+    @Override
+    public Nurse create(Nurse t) {
+        String sql = "INSERT INTO nurse (Fullname, Gender, phoneno, specialization) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            int idx=1;
+            ps.setString(idx++, t.getFullname());
+            ps.setString(idx++, String.valueOf(t.getGender()));
+            ps.setString(idx++, t.getPhoneNo());
+            ps.setString(idx, t.getSpecialization());
+
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) return null;
+
+            System.out.println(rows + " row(s) inserted successfully!");
+            return t;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Nurse update(Nurse t) {
+       String sql = "UPDATE nurse " +
+                    "SET Fullname = ?, PhoneNo = ?, Gender = ?, Specialization = ? " +
+                    "WHERE nurse_id = ?";
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            int idx = 1;
+            ps.setString(idx++, t.getFullname());
+            ps.setString(idx++, t.getPhoneNo());
+            ps.setString(idx++, String.valueOf(t.getGender()));
+            ps.setString(idx++, t.getSpecialization());
+            ps.setInt(idx, t.getSID());
+
+
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) return null;
+
+            System.out.println(rows + " row(s) updated successfully!");
+            return t;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Nurse delete(Nurse t) {
+       String sql = "DELETE from nurse " +
+                    "WHERE SSN = ?";
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, t.getSID());
+
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) return null;
+
+            System.out.println(rows + " rows deleted successfully!");
+            return t;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Nurse> selectAll() {
+        ArrayList<Nurse> nurses = new ArrayList<>();
+        String sql = "SELECT * from nurse ";
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+            
+            int count = 0;
+
+            while (rs.next()) {
+
+                Nurse n = MapperUtil.mapNurse(rs);
+
+                nurses.add(n);
+
+                ++count;
+            }
+
+            System.out.println(count + " row(s) retrieved!");
+
+            return nurses;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Nurse selectById(Integer k) {
+
+        Nurse n = new Nurse();
+
+        String sql = "SELECT * from nurse WHERE nurse_id = ?";
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, k);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                n = MapperUtil.mapNurse(rs);
+            }
+            
+            System.out.println("Retrieved nurse with SID = " + k + " successfully!");
+
+            return n;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Nurse> selectByCondition(String condition) {
+        ArrayList<Nurse> nurses = new ArrayList<>();
+        String sql = "SELECT * from nurse " + condition;
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+            
+            int count = 0;
+
+            while (rs.next()) {
+                Nurse n = MapperUtil.mapNurse(rs);
+
+                nurses.add(n);
+
+                ++count;
+            }
+
+            System.out.println(count + " rows(s) retrieved!");
+
+            return nurses;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+}
