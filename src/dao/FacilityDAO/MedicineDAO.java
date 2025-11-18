@@ -13,9 +13,6 @@ import util.DBConnect;
 
 public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
-    public static MedicineDAO getInstance() {
-        return new MedicineDAO();
-    }
     
     @Override
     public Medicine create(Medicine t) {
@@ -41,7 +38,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
     }
 
     @Override
-    public Medicine update(Medicine t) {
+    public Integer update(Medicine t) {
        String sql = "UPDATE medicine " +
                     "SET drugname = ?, quantity = ?" + 
                     "WHERE drug_id = ?";
@@ -58,33 +55,33 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
     @Override
-    public Medicine delete(Medicine t) {
+    public Integer delete(Integer k) {
        String sql = "DELETE from medicine " +
                     "WHERE drug_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, t.getDrugID());
+            ps.setInt(1, k);
 
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) deleted successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 

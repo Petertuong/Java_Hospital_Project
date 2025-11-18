@@ -2,28 +2,28 @@ package model.Facility;
 
 public class Room {
 
-	private String RoomNo;
+	private int RoomNo;
 	private int BedsAvailable = 0;
 
 	public Room() {
 	}; // default constructor
 
 	// constructor for creating room
-	public Room(String RoomNo) {
+	public Room(int RoomNo) {
 		this.RoomNo = RoomNo;
 	}
 
 	// constructor for loading room
-	public Room(String RoomNo, int BedsAvailable) {
+	public Room(int RoomNo, int BedsAvailable) {
 		this.RoomNo = RoomNo;
 		this.BedsAvailable = BedsAvailable;
 	}
 
-	public void setRoomNo(String RoomNo) {
+	public void setRoomNo(int RoomNo) {
 		this.RoomNo = RoomNo;
 	}
 
-	public String getRoomNo() {
+	public int getRoomNo() {
 		return RoomNo;
 	}
 

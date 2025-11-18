@@ -23,15 +23,13 @@ public class Nurse extends StaffClass {
 	}
 
 	//when a new patient is assigned -> increase count
-	public int incrPatient_in_charge() {
+	public void incrPatient_in_charge() {
 		Patient_in_charge += 1;
-		return Patient_in_charge;
 	}
 	
 	//when a patient is discharged -> decrease count
-	public int decrPatient_in_charge() {
+	public void decrPatient_in_charge() {
 		Patient_in_charge -= 1;
-		return Patient_in_charge;
 	}
 
 

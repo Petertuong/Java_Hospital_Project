@@ -11,12 +11,9 @@ import dao.MapperUtil;
 import model.Facility.Room;
 import util.DBConnect;
 
-public class RoomDAO implements DAOInterface<Room, String> {
+public class RoomDAO implements DAOInterface<Room, Integer> {
 
-    public static RoomDAO getInstance() {
-        return new RoomDAO();
-    }
-    
+
     @Override
     public Room create(Room t) {
         String sql = "INSERT INTO room (roomno, bedsavailable) VALUES (?, ?)";
@@ -24,7 +21,7 @@ public class RoomDAO implements DAOInterface<Room, String> {
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             int idx=1;
-            ps.setString(idx++, t.getRoomNo());
+            ps.setInt(idx++, t.getRoomNo());
             ps.setInt(idx, t.getBedsAvailable());
 
             int rows = ps.executeUpdate();
@@ -41,7 +38,7 @@ public class RoomDAO implements DAOInterface<Room, String> {
     }
 
     @Override
-    public Room update(Room t) {
+    public Integer update(Room t) {
        String sql = "UPDATE room " +
                     "SET bedsavailable = ?" + 
                     "WHERE roomno= ?";
@@ -56,33 +53,33 @@ public class RoomDAO implements DAOInterface<Room, String> {
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
     @Override
-    public Room delete(Room t) {
+    public Integer delete(Integer roomno) {
        String sql = "DELETE from room " +
                     "WHERE roomno = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, t.getRoomNo());
+            ps.setInt(1, roomno);
 
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) deleted successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
@@ -117,14 +114,14 @@ public class RoomDAO implements DAOInterface<Room, String> {
     }
 
     @Override
-    public Room selectById(String k) {
+    public Room selectById(Integer k) {
 
         Room r = new Room();
         String sql = "SELECT * from room WHERE roomno = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            ps.setString(1, k);
+            ps.setInt(1, k);
 
             ResultSet rs = ps.executeQuery();
 
@@ -147,7 +144,7 @@ public class RoomDAO implements DAOInterface<Room, String> {
     @Override
     public ArrayList<Room> selectByCondition(String condition) {
         ArrayList<Room> rooms = new ArrayList<>();
-        String sql = "SELECT * from doctor WHERE " + condition;
+        String sql = "SELECT * from room WHERE " + condition;
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 

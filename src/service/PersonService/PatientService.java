@@ -8,7 +8,6 @@ import model.Treatment.Status;
 import service.AbstractService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class PatientService extends AbstractService<PatientDAO> implements IPatientService{
     
@@ -29,12 +28,12 @@ public class PatientService extends AbstractService<PatientDAO> implements IPati
 	}
 
 	@Override
-	public Patient updatePatientStatus(Patient patient) {
+	public String updatePatientStatus(Patient patient) {
 		return patientdao.update(patient);
 	}
 
 	@Override
-	public Patient deletePatient(String ssn) {
+	public String deletePatient(String ssn) {
 		return patientdao.delete(ssn);
 	}
 

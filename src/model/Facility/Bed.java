@@ -6,7 +6,7 @@ import model.Staff.Nurse;
 public class Bed {
 
 	private Room Room;
-	private String BedNo;
+	private Integer BedNo;
 	private boolean IsOccupied = false;
 	private Patient patient;
 	private Nurse nurse;
@@ -14,7 +14,7 @@ public class Bed {
 	//default constructor
 	public Bed() {};
 	//loading constructor
-	public Bed(Room room, String bedNo, boolean isOccupied, Patient patient, Nurse nurse) {
+	public Bed(Room room, int bedNo, boolean isOccupied, Patient patient, Nurse nurse) {
 		this.Room = room;
 		this.BedNo = bedNo;
 		this.IsOccupied = isOccupied;
@@ -23,7 +23,7 @@ public class Bed {
 	}
 
 	//creating constructor
-	public Bed(Room room, String bedNo) {
+	public Bed(Room room, int bedNo) {
 		this.Room = room;
 		this.BedNo = bedNo;
 		this.IsOccupied = false;
@@ -74,7 +74,7 @@ public class Bed {
 		Room = room;
 	}
 
-	public void setBedno(String bedno){
+	public void setBedno(Integer bedno){
 		BedNo = bedno;
 	}
 }

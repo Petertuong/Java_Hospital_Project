@@ -39,18 +39,15 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
     }
 
     @Override
-    public Nurse update(Nurse t) {
+    public Integer update(Nurse t) {
        String sql = "UPDATE nurse " +
-                    "SET Fullname = ?, PhoneNo = ?, Gender = ?, Specialization = ? " +
+                    "SET Patient_in_charge = ?" +
                     "WHERE nurse_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             int idx = 1;
-            ps.setString(idx++, t.getFullname());
-            ps.setString(idx++, t.getPhoneNo());
-            ps.setString(idx++, String.valueOf(t.getGender()));
-            ps.setString(idx++, t.getSpecialization());
+            ps.setInt(idx++, t.getPatient_in_charge());
             ps.setInt(idx, t.getSID());
 
 
@@ -59,35 +56,14 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return t.getPatient_in_charge();
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
-    @Override
-    public Nurse delete(Nurse t) {
-       String sql = "DELETE from nurse " +
-                    "WHERE SSN = ?";
-        try (Connection conn = DBConnect.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, t.getSID());
-
-            int rows = ps.executeUpdate();
-
-            if (rows == 0) return null;
-
-            System.out.println(rows + " rows deleted successfully!");
-            return t;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     @Override
     public ArrayList<Nurse> selectAll() {
@@ -173,6 +149,28 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public Integer delete(Integer k) {
+        String sql = "DELETE from Nurse " +
+                    "WHERE nurse_id = ?";
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, k);
+
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) return null;
+
+            System.out.println(rows + " rows deleted successfully!");
+            return 1;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 

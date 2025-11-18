@@ -13,10 +13,7 @@ import util.DBConnect;
 
 public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
 
-    public static PrescriptionDAO getInstance() {
-        return new PrescriptionDAO();
-    }
-    
+
     @Override
     public Prescription create(Prescription t) {
         String sql = "INSERT INTO prescription (description, doctor_id, dosage_per_day, drug_id, number_of_day, ssn) VALUES (?, ?, ?, ?, ?, ?)";
@@ -46,54 +43,53 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
     }
 
     @Override
-    public Prescription update(Prescription t) {
+    public Integer update(Prescription t) {
        String sql = "UPDATE prescription " +
-                    "SET description = ?, doctor_id = ?, dosage_per_day = ?, drug_id = ?, number_of_day = ?, ssn = ?" + 
+                    "SET description = ?, dosage_per_day = ?, drug_id = ?, number_of_day = ?" + 
                     "WHERE treatment_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             int idx = 1;
-            ps.setInt(idx++, t.getTreatmentID());
             ps.setString(idx++, t.getDescription());
-            ps.setInt(idx++, t.getDoctor().getSID());
             ps.setInt(idx++, t.getDosagePerDay());
             ps.setInt(idx++, t.getMedicine().getDrugID());
             ps.setInt(idx++, t.getNumberOfDay());
-            ps.setString(idx, t.getPatient().getSSN());
+            ps.setInt(idx, t.getTreatmentID());
+
 
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
     @Override
-    public Prescription delete(Prescription t) {
+    public Integer delete(Integer k) {
        String sql = "DELETE from prescription " +
                     "WHERE treatment_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, t.getTreatmentID());
+            ps.setInt(1, k);
 
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) deleted successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 

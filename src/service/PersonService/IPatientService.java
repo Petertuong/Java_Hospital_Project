@@ -9,9 +9,9 @@ public interface IPatientService {
 
     public Patient addPatient(Patient patient);
     
-    public Patient updatePatientStatus(Patient patient);
+    public String updatePatientStatus(Patient patient);
 
-    public Patient deletePatient(String ssn);
+    public String deletePatient(String ssn);
 
     public ArrayList<Patient> listPatient();
 

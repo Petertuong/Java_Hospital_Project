@@ -6,8 +6,7 @@ public class Medicine {
 	private String DrugName;
 	private int Quantity;
 
-	public Medicine() {
-	};
+	public Medicine() {};
 
 	public Medicine(int drugid, String drugname, int quantity) {
 		DrugID = drugid;

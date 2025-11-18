@@ -13,9 +13,6 @@ import util.DBConnect;
 
 public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
 
-    public static DiagnosisDAO getInstance() {
-        return new DiagnosisDAO();
-    }
     
     @Override
     public Diagnosis create(Diagnosis t) {
@@ -41,15 +38,14 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
     }
 
     @Override
-    public Diagnosis update(Diagnosis t) {
+    public Integer update(Diagnosis t) {
        String sql = "UPDATE Diagnosis " +
-                    "SET ssn = ?, result = ?" + 
+                    "SET result = ?" + 
                     "WHERE diag_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             int idx = 1;
-            ps.setString(idx++, t.getPatient().getSSN());
             ps.setString(idx++, t.getResult());
             ps.setInt(idx, t.getDiag_id());
 
@@ -58,33 +54,33 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
     @Override
-    public Diagnosis delete(Diagnosis t) {
+    public Integer delete(Integer k) {
        String sql = "DELETE from diagnosis " +
                     "WHERE diag_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, t.getDiag_id());
+            ps.setInt(1, k);
 
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) deleted successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 

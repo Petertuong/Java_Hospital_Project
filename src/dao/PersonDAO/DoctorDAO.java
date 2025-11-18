@@ -41,7 +41,7 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
     }
 
     @Override
-    public Doctor update(Doctor t) {
+    public Integer update(Doctor t) {
        String sql = "UPDATE doctor " +
                     "SET Fullname = ?, PhoneNo = ?, Gender = ?, Qualification = ?, Specialization = ? " +
                     "WHERE doctor_id = ?";
@@ -62,33 +62,33 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
     @Override
-    public Doctor delete(Doctor t) {
+    public Integer delete(Integer k) {
        String sql = "DELETE from doctor " +
                     "WHERE doctor_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, t.getSID());
+            ps.setInt(1, k);
 
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) deleted successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 

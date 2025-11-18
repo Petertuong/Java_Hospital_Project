@@ -7,9 +7,9 @@ public interface DAOInterface<T, K> {
     //CRUD Operations
     public T create(T t);
 
-    public T update(T t);
+    public K update(T t);
 
-    public T delete(K k);
+    public K delete(K k);
 
     //Other Operations
     public ArrayList<T> selectAll();

@@ -42,7 +42,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
     }
 
     @Override
-    public Bed update(Bed t) {
+    public Integer update(Bed t) {
        String sql = "UPDATE bed " +
                     "SET is_occupied = ?, nurse_id = ?, ssn = ?" + 
                     "WHERE bedno = ?";
@@ -66,22 +66,22 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
     @Override
-    public Bed delete(Bed t) {
+    public Integer delete(Integer k) {
        String sql = "DELETE from bed " +
                     "WHERE bedno = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, t.getBedNo());
+            ps.setInt(1, k);
         
 
             int rows = ps.executeUpdate();
@@ -89,11 +89,11 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) deleted successfully!");
-            return t;
+            return 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
     }
 
@@ -138,7 +138,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
                     "LEFT OUTER JOIN patient p ON (b.ssn = p.ssn)" +
                     "LEFT OUTER JOIN nurse n ON (b.nurse_id = n.nurse_id)" +
                     "JOIN room r ON (b.roomno = r.roomno)" +
-                    "WHERE bedno = ? AND roomno = ?";
+                    "WHERE bedno = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
             

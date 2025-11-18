@@ -41,7 +41,7 @@ public class PatientDAO implements DAOInterface<Patient, String> {
     }
 
     @Override
-    public Patient update(Patient t) {
+    public String update(Patient t) {
        String sql = "UPDATE Patient " +
                     "Status = ? " +
                     "WHERE SSN = ?";
@@ -56,16 +56,16 @@ public class PatientDAO implements DAOInterface<Patient, String> {
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
-            return t;
+            return "Ok";
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return "Fail";
         }
     }
 
     @Override
-    public Patient delete(String k) {
+    public String delete(String k) {
        String sql = "DELETE from Patient " +
                     "WHERE SSN = ?";
         try (Connection conn = DBConnect.getConnection();
@@ -78,11 +78,11 @@ public class PatientDAO implements DAOInterface<Patient, String> {
             if (rows == 0) return null;
 
             System.out.println(rows + " rows deleted successfully!");
-            return t;
+            return "Ok";
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return "Fail";
         }
     }
 
