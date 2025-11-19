@@ -37,14 +37,5 @@ public class Nurse extends StaffClass {
 	public String getRole(){
 		return "Nurse".toString();
 	}
-	// public void readNurse() {
-	// 	System.out.println(
-	// 		"Full name: " + this.getFullname() +
-	// 		"Working Phone: " + this.getPhoneNo() +
-	// 		"Gender: " + this.getGender() +
-	// 		"SID: " + this.getSID() +
-	// 		"Specification: " + this.getSpecialization() +
-	// 		"Patients in charge: " + Patient_in_charge
-	// 	);
-	// }
+
 }

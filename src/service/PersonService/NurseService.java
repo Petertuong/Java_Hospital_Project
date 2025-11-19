@@ -69,6 +69,23 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
         return nursedao.selectByCondition(condition);
     }
 
+    @Override
+    public Nurse getNurseByMinPID() {
+        
+        ArrayList<Nurse> allNurses = listNurse();
+
+        int min = allNurses.get(0).getPatient_in_charge();
+        Nurse nurseMin = new Nurse();
+        for (Nurse nurse: allNurses){
+            if(min > nurse.getPatient_in_charge()){
+                min = nurse.getPatient_in_charge();
+                nurseMin = nurse;
+            }
+        }
+
+        return nurseMin;
+    }
+
 
     
 }

@@ -9,6 +9,7 @@ import service.AbstractService;
 public class PrescriptionService extends AbstractService<PrescriptionDAO> implements IPrescriptionService{
 
     PrescriptionDAO prescriptiondao;
+    
     @Override
     public PrescriptionDAO createEntityDAO() {
         return new PrescriptionDAO();

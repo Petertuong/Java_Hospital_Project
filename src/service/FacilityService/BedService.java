@@ -19,11 +19,6 @@ public class BedService extends AbstractService<BedDAO> implements IBedService {
     }
 
     @Override
-    public Bed addBed(Bed bed) {
-        return beddao.create(bed);
-    }
-
-    @Override
     public Integer updateBedStatus(Bed bed) {
         return beddao.update(bed);
     }
@@ -49,5 +44,20 @@ public class BedService extends AbstractService<BedDAO> implements IBedService {
         return beddao.selectByCondition(condition);
     }
 
+    @Override
+    public ArrayList<Bed> findAvailableBed(){
+        String condition = "is_occupied = " + 0;
+        return beddao.selectByCondition(condition);
+    }
 
+    @Override
+    public Bed findBedBySSN(String ssn){
+        String condition = "ssn = " + ssn;
+        return beddao.selectByCondition(condition).get(0);
+    }
+
+    @Override
+    public Bed addBed(Bed bed) {
+        return beddao.create(bed);
+    }
 }

@@ -25,7 +25,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             int idx=1;
-            ps.setString(idx++, t.getRoom().getRoomNo());
+            ps.setInt(idx++, t.getRoom().getRoomNo());
             ps.setInt(idx, t.getBedNo());
 
             int rows = ps.executeUpdate();

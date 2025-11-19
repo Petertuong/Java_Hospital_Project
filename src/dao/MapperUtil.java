@@ -52,7 +52,7 @@ public class MapperUtil {
     }
 
     public static Room mapRoom (ResultSet rs) throws SQLException{
-        String roomno = rs.getString("roomno");
+        int roomno = rs.getInt("roomno");
         int BedsAvailable = rs.getInt("bedsavailable");
 
         Room r = new Room(roomno, BedsAvailable);
@@ -65,7 +65,7 @@ public class MapperUtil {
             //room
             Room r = MapperUtil.mapRoom(rs);
             //bed
-            String bedno = rs.getString("bedno");
+            int bedno = rs.getInt("bedno");
             boolean isOccupied = rs.getBoolean("is_occupied");
             //patient
             Patient p = MapperUtil.mapPatient(rs);

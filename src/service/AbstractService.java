@@ -2,6 +2,7 @@ package service;
 
 public abstract class AbstractService<EntityDAO> {
 
+    @SuppressWarnings("unused")
     private EntityDAO entityDAO;
 
     public AbstractService(){
@@ -9,4 +10,5 @@ public abstract class AbstractService<EntityDAO> {
     }
 
     public abstract EntityDAO createEntityDAO();
+
 }

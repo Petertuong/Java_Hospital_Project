@@ -47,39 +47,6 @@ public class Prescription {
 
 	}
 
-	// //Method to set Prescription and Diagnosis with access control
-	// public Prescription setPrescription(Medicine med, int DPD, int NOD, String
-	// description, Patient Patient, Doctor Doctor){
-
-	// if(!Prescription.AccessKey.EditPrescKey(Doctor.getSpecialization())){
-	// System.out.println("Access Denied: Intern Doctors can't set Prescriptions.");
-	// return null;
-	// }
-
-	// Prescription pre = new Prescription();
-
-	// pre.setMedicine(med, DPD, NOD);
-	// pre.setPatient(Patient);
-	// pre.setDoctor(Doctor);
-	// pre.setDescription(description);
-
-	// return pre;
-	// }
-
-	// private void setMedicine(Medicine Medicine, int DosagePerDay, int
-	// NumberOfDay){
-
-	// if (Medicine.isEmpty()){
-	// System.out.println("Cannot set prescription: Medicine is out of stock.");
-	// return;
-	// }
-
-	// this.Medicine = Medicine;
-	// this.DosagePerDay = DosagePerDay;
-	// this.NumberOfDay = NumberOfDay;
-	// this.setTotal(Medicine, DosagePerDay, NumberOfDay);
-	// }
-
 	public void setMedicine(Medicine med) {
 		Medicine = med;
 	}
@@ -136,10 +103,4 @@ public class Prescription {
 		return Total;
 	}
 
-	// //access key for access control
-	// public class AccessKey{
-	// public static boolean EditPrescKey(String role){
-	// return !role.equals("Intern");
-	// }
-	// }
 }

@@ -17,5 +17,9 @@ public interface IBedService {
     public Bed findBedByNo(Integer bedno);
 
     public ArrayList<Bed> findBedByRoomNo(Integer roomno);
+
+    public Bed findBedBySSN(String ssn);
+
+    public ArrayList<Bed> findAvailableBed();
     
 }

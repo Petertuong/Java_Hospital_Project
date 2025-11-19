@@ -42,18 +42,6 @@ public class Diagnosis {
 		return Result;
 	}
 
-	// public Diagnosis setResult(String res, Doctor Doctor){
-		
-	// 	if(!Diagnosis.AccessKey.EditDiagKey(Doctor.getSpecialization())){
-	// 		System.out.println("Access Denied: Intern Doctors can't set Diagnosis.");
-	// 		return null;
-	// 	}
-
-	// 	Diagnosis diag = new Diagnosis();
-	// 	diag.setResult(res);
-	// 	diag.setPatient(patient);
-	// 	return diag;
-	// }
 
     public int getDiag_id() {
         return diag_id;
@@ -63,10 +51,4 @@ public class Diagnosis {
         this.diag_id = diag_id;
     }
 
-	// //access control (lies in service.security layer)
-	// public class AccessKey{
-	// 	public static boolean EditDiagKey(String role){
-	// 		return !role.equals("Intern");
-	// 	}
-	// }
 }

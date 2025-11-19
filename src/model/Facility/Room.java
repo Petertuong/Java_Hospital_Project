@@ -39,56 +39,7 @@ public class Room {
 		BedsAvailable -= 1;
 	}
 
-	// public List<Bed> getBedsList() {
-	// return BedsList;
-	// }
-
-	// public void addBed(Bed bed) {
-
-	// if (!bed.getRoom().getRoomNo().equals(RoomNo)) {
-	// System.out.println("Error: Bed's room does not match.");
-	// return;
-	// }
-
-	// BedsList.add(bed);
-	// BedsAvailable += 1;
-	// }
-	// //for hospitalizePatient() method
-	// public Bed assignBed() {
-	// //for each bed in the assigned room, check if it's unoccupied
-	// //if not, assign the bed to the patient and mark it as occupied
-	// for(Bed bed: BedsList){
-	// if (!bed.isOccupied()){
-	// bed.setOccupied(true);
-	// BedsAvailable -= 1;
-	// return bed;
-	// }
-	// }
-
-	// return null;
-	// }
-
-	// //for dischargepatient() method
-	// public void releaseBed(Bed otherBed) {
-
-	// for(Bed bed: BedsList){
-	// if (bed.equals(otherBed)){
-	// if (bed.isOccupied()){
-	// bed.setOccupied(false);
-	// BedsAvailable += 1;
-	// return;
-	// }
-	// else{
-	// System.out.println("Error: Bed is already unoccupied.");
-	// return;
-	// }
-	// }
-	// }
-
-	// System.out.println("Error: Bed not found in this room.");
-	// }
-
-	// public void setBedsList(List<Bed> BedsList) {
-	// this.BedsList = BedsList;
-	// }
+	public void setBedsAvialabletozero(){
+		BedsAvailable = 0;
+	}
 }

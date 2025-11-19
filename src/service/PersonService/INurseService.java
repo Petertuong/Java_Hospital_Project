@@ -18,5 +18,7 @@ public interface INurseService {
 
     public ArrayList<Nurse> findNurseByGender(char c);
 
-    public ArrayList<Nurse> findNurseByPIDMax();
+    public ArrayList<Nurse> findNurseByPIDMax();//get nurse who can't be assigned more patient
+
+    public Nurse getNurseByMinPID();
 }

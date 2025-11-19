@@ -1,66 +1,65 @@
-package service;
+package service.MultiService;
+
+import model.Facility.Bed;
+import model.Patients.Patient;
+import model.Staff.Nurse;
+import service.FacilityService.BedService;
+import service.FacilityService.RoomService;
+import service.PersonService.*;
 
 public class AdmissionService {
 
+	PatientService patientS;
+	DoctorService doctorS;
+	NurseService nurseS;
+	BedService bedS;
+	RoomService roomS;
 
+	public AdmissionService(){};
 
-	// //Helper methods for hospitalize and discharge patient
-	// private Bed hospitalizePatient(Patient P, Nurse N, Room R) {
+	public String admitPatient(String ssn) {
 		
-	// 	if (!P.getStatus().equals("Admit")){
-	// 		System.out.println("Cannot hospitalize patient: Patient is not admitted.");
-	// 		return null;
-	// 	}
+		//retrieve patient
+		Patient patient = patientS.findPatientById(ssn);
 
-	// 	N.incrPatient_in_charge();
-	// 	Bed bed = R.assignBed();
+		//prevent duplicate admission
+		if(patient.getStatus().equals("Admitted")){
+			return "already admitted";
+		}
+		//get available bed
+		Bed bed = bedS.findAvailableBed().get(0);
+		//get the most available nurse
+		Nurse nurse = nurseS.getNurseByMinPID();
 
-	// 	System.out.println("Patient " + P.getFullname() + 
-	// 	" is hospitalized under Nurse " + N.getFullname() + 
-	// 	" in Room " + R.getRoomNo() +
-	// 	" at Bed " + bed.getBedNo() + "."
-	// 	);
+		//update bed status
+		bed.setNurse(nurse);
+		bed.setPatient(patient);
+		bed.setOccupied(true);
+		bedS.updateBedStatus(bed);
+		//update nurse PID
+		nurseS.incrPID(nurse);
 
-	// 	return bed;
-	// }
+		return "admitted";
+	}
 
-	// private void dischargePatient(Bed bed) {
+	public String dischargePatient(String ssn) {
 		
-	// 	if (!bed.getPatient().getStatus().equals("Discharge")){
-	// 		System.out.println("Cannot discharge patient: Patient is not discharged.");
-	// 		return;
-	// 	}
+		//retrieve patient
+		Patient patient = patientS.findPatientById(ssn);
 
-	// 	bed.getNurse().decrPatient_in_charge();
-	// 	bed.getRoom().releaseBed(bed);
+		//prevent duplicate admission
+		if(patient.getStatus().equals("Discharged")){
+			return "already discharged";
+		}
 
-	// 	System.out.println("Patient " + bed.getPatient().getFullname() + 
-	// 	" is discharged from Room " + bed.getRoom().getRoomNo() + 
-	// 	"at bed " + bed.getBedNo() + "."
-	// 	);
-	// }
+		//get available bed
+		Bed bed = bedS.findBedBySSN(ssn);
+		//decr nurse PID
+		nurseS.decrPID(bed.getNurse());
+		//update bed status
+		bed.setOccupied(false);
+		bedS.updateBedStatus(bed);
 
-	// //set status method, pass Doctor to gain access
-	// public void setStatus(Status Stat, Doctor D, Nurse N, Room R) {
-	// 	status = Stat;
-
-	// 	if(status == Status.Admit){ 
-	// 		this.hospitalizePatient(this, N, R);
-	// 	}
-	// 	else if (status == Status.Discharge){
-	// 		throw new UnsupportedOperationException();
-	// 	}
-	// }
-
-	// //overloading set status method
-	// public void setStatus(Status Stat, Doctor D, Bed bed) {
-	// 	bed.getPatient().status = Stat;
-
-	// 	if(bed.getPatient().status == Status.Admit){
-	// 		throw new UnsupportedOperationException();
-	// 	}
-	// 	else if (bed.getPatient().status == Status.Discharge){
-	// 		this.dischargePatient(bed);
-	// 	}
-	// }
+		return "discharged";		
+	}
 }

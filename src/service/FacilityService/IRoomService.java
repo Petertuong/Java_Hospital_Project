@@ -10,7 +10,7 @@ public interface IRoomService {
 
     public Integer incrBedsavailable(Room room);
 
-    public Integer decrBedsavailable(Room room);
+    public Integer setBedsavailablezero(Room room);
 
     public Integer deleteRoom(Integer roomno);
 
@@ -20,3 +20,4 @@ public interface IRoomService {
 
     public ArrayList<Room> findRoomByBeds(Integer num, boolean compare);
 }
+//bedsavaible is just the number of bed in a room

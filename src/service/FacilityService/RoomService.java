@@ -30,13 +30,9 @@ public class RoomService extends AbstractService<RoomDAO> implements IRoomServic
     }
 
     @Override
-    public Integer decrBedsavailable(Room room) {
-        if(room.getBedsAvailable() <= 0){
-            return -1;
-        }
+    public Integer setBedsavailablezero(Room room) {
 
-        room.decrBedsAvailable();
-
+        room.setBedsAvialabletozero();
         return roomdao.update(room);
     }
 
