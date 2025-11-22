@@ -13,6 +13,8 @@ public interface INurseService {
     public Integer incrPID(Nurse nurse);
 
     public ArrayList<Nurse> listNurse();
+
+    public Integer deleteNurse(Integer k);
     
     public Nurse findNurseByID(Integer k);
 

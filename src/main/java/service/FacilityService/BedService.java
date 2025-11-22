@@ -24,6 +24,16 @@ public class BedService extends AbstractService<BedDAO> implements IBedService {
     }
 
     @Override
+    public Bed updateBed(Bed bed){
+
+        Bed abed = this.findBedByNo(bed.getBedNo());
+
+        this.delete(bed.getBedNo());
+
+        return this.addBed(abed);
+    }
+
+    @Override
     public Integer delete(Integer bedno) {
         return beddao.delete(bedno);
     }

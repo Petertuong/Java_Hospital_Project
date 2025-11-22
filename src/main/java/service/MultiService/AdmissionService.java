@@ -3,6 +3,7 @@ package  service.MultiService;
 import  model.Facility.Bed;
 import  model.Patients.Patient;
 import  model.Staff.Nurse;
+import model.Treatment.Status;
 import  service.FacilityService.BedService;
 import  service.FacilityService.RoomService;
 import  service.PersonService.*;
@@ -15,7 +16,13 @@ public class AdmissionService {
 	BedService bedS;
 	RoomService roomS;
 
-	public AdmissionService(){};
+	public AdmissionService(){
+		this.patientS = new PatientService();
+		this.doctorS = new DoctorService();
+		this.nurseS = new NurseService();
+		this.bedS = new BedService();
+		this.roomS = new RoomService();
+	};
 
 	public String admitPatient(String ssn) {
 		
@@ -25,6 +32,9 @@ public class AdmissionService {
 		//prevent duplicate admission
 		if(patient.getStatus().equals("Admitted")){
 			return "already admitted";
+		}else{
+			patient.setStatus(Status.Admit);
+			patientS.updatePatientStatus(patient);
 		}
 		//get available bed
 		Bed bed = bedS.findAvailableBed().get(0);
@@ -50,6 +60,9 @@ public class AdmissionService {
 		//prevent duplicate admission
 		if(patient.getStatus().equals("Discharged")){
 			return "already discharged";
+		}else{
+			patient.setStatus(Status.Discharge);
+			patientS.updatePatientStatus(patient);
 		}
 
 		//get available bed

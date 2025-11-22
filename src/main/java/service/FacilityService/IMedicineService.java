@@ -8,9 +8,9 @@ public interface IMedicineService {
 
     public Medicine addMedicine(Medicine Medicine);
 
-    public Integer fillMedicineStock(Medicine Medicine, int amount);
+    public Integer fillMedicineStock(Medicine Medicine);
 
-    public Integer decreaseMedicineStock(Medicine Medicine, int amount);
+    public Integer decreaseMedicineStock(Medicine Medicine);
 
     public Integer deleteMedicine(Integer drugid);
 

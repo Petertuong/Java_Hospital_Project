@@ -10,6 +10,8 @@ public interface IBedService {
 
     public Integer updateBedStatus(Bed bed);
 
+    public Bed updateBed(Bed bed);
+
     public Integer delete(Integer bedno);
 
     public ArrayList<Bed> listBed();

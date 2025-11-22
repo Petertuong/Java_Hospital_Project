@@ -22,8 +22,7 @@ public class DiagnosisService extends AbstractService<DiagnosisDAO> implements I
     }
 
     @Override
-    public Integer changeResult(Diagnosis Diagnosis, String result) {
-        Diagnosis.setResult(result);
+    public Integer changeResult(Diagnosis Diagnosis) {
         return diagnosisdao.update(Diagnosis);
     }
 

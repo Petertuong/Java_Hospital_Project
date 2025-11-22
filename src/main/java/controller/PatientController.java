@@ -1,6 +1,7 @@
 package controller;
 
 import model.Patients.Patient;
+import service.MultiService.AdmissionService;
 import service.PersonService.PatientService;
 import dao.PersonDAO.PatientDAO;
 import model.Treatment.Status;
@@ -17,10 +18,13 @@ import java.util.ArrayList;
 public class PatientController extends BaseController {
 
     private PatientService patientService;
+    private AdmissionService admissionService;
 
     public PatientController(){
         this.patientService = new PatientService();
+        this.admissionService = new AdmissionService();
     }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
@@ -33,19 +37,13 @@ public class PatientController extends BaseController {
             }else if (pathInfo.startsWith("/age/")){ //find by age
                 int age = parseaInt(pathInfo);
                 ArrayList<Patient> patientsByAge = patientService.findPatientByAge(age);
-                if (!patientsByAge.isEmpty()){
-                    sendJson(resp, patientsByAge);
-                } else{
-                    sendError(resp, 404, "Patient not found");
-                } 
+                sendJson(resp, patientsByAge);
+
             }else if(pathInfo.startsWith("/status/")){ //find by status
                 Status Status = model.Treatment.Status.valueOf(parseaString(pathInfo));
                 ArrayList<Patient> patientsByStatus = patientService.findPatientByStatus(Status);
-                if(!patientsByStatus.isEmpty()){
-                    sendJson(resp, patientsByStatus);
-                } else{
-                    sendError(resp, 404, "Patient not found");
-                }
+                sendJson(resp, patientsByStatus);
+
             }else { //find by id
                 String ssn = parseaString(pathInfo);
                 Patient patient = patientService.findPatientById(ssn);
@@ -100,6 +98,7 @@ public class PatientController extends BaseController {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        
         String pathInfo = req.getPathInfo();
 
         try {
@@ -120,13 +119,24 @@ public class PatientController extends BaseController {
             
             updates.setSSN(ssn); 
 
-            String success = patientService.updatePatientStatus(updates);
+            if(updates.getStatus() == "Admitted"){
+                String success = admissionService.admitPatient(ssn);
 
-            if (success.equals("Ok")) {
-                sendJson(resp, "Patient updated");
-            } else {
-                sendError(resp, 400, "Update failed");
+                if (success.equals("Ok")) {
+                    sendJson(resp, "Patient updated");
+                } else {
+                    sendError(resp, 400, "Update failed");
+                }
+            }else if(updates.getStatus() == "Discharged"){
+                String success = admissionService.dischargePatient(ssn);
+
+                if (success.equals("Ok")) {
+                    sendJson(resp, "Patient updated");
+                } else {
+                    sendError(resp, 400, "Update failed");
+                }
             }
+
 
         } catch (Exception e) {
             sendError(resp, 500, e.getMessage());

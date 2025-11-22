@@ -21,3 +21,4 @@ public interface IPatientService {
 
     public ArrayList<Patient> findPatientByStatus(Status status);
 }
+

@@ -11,9 +11,9 @@ public class Prescription {
 	private int NumberOfDay;
 	private int TreatmentID;
 	private Patient patient;
-	private Doctor Doctor;
+	private Doctor Doctor; //nullable
 	private int Total;
-	private String description;
+	private String description; //nullable
 
 	public Prescription() {
 		// default constructor
@@ -47,6 +47,10 @@ public class Prescription {
 
 	}
 
+	public void setTreatmentID(int id) {
+		TreatmentID = id;
+	}
+	
 	public void setMedicine(Medicine med) {
 		Medicine = med;
 	}

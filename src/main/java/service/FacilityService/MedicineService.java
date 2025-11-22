@@ -25,15 +25,17 @@ public class MedicineService extends AbstractService<MedicineDAO> implements IMe
     }
 
     @Override
-    public Integer fillMedicineStock(Medicine Medicine, int amount) {
-        Medicine.fillStock(amount);
-        return medicinedao.update(Medicine);
+    public Integer fillMedicineStock(Medicine Medicine) {
+        Medicine med = this.findMedicineByNo(Medicine.getDrugID());
+        med.fillStock(Medicine.getQuantity()); // here, Quantity represents the amount to add
+        return medicinedao.update(med);
     }
 
     @Override
-    public Integer decreaseMedicineStock(Medicine Medicine, int amount) {
-        Medicine.decreaseStock(amount);
-        return medicinedao.update(Medicine);       
+    public Integer decreaseMedicineStock(Medicine Medicine) {
+        Medicine med = this.findMedicineByNo(Medicine.getDrugID());
+        med.decreaseStock(Medicine.getQuantity()); // here, Quantity represents the amount to decrease
+        return medicinedao.update(med);       
     }
 
     @Override

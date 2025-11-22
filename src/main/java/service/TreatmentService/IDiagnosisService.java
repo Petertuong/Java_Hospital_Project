@@ -8,7 +8,7 @@ public interface IDiagnosisService {
 
     public Diagnosis addDiagnosis(Diagnosis Diagnosis);
 
-    public Integer changeResult(Diagnosis Diagnosis, String result);
+    public Integer changeResult(Diagnosis Diagnosis);
 
     public Integer deleteDiagnosis(Integer diag_id);
 

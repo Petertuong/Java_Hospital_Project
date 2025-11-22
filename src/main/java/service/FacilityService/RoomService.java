@@ -52,17 +52,17 @@ public class RoomService extends AbstractService<RoomDAO> implements IRoomServic
     }
 
     @Override
-    public ArrayList<Room> findRoomByBeds(Integer num, boolean compare) {
-        //if true compare: > num
-        if(compare){
-            String condition = "BedsAvailable > " + num;
-            return roomdao.selectByCondition(condition);
-        }else{//if false compare: < num
-            String condition = "BedsAvailable < " + num;
-            return roomdao.selectByCondition(condition);
-        }
+    public ArrayList<Room> findRoomByBedsSmaller(Integer num) {
+
+        String condition = "BedsAvailable < " + num;
+        return roomdao.selectByCondition(condition);
+        
     }
 
+    @Override
+    public ArrayList<Room> findRoomByBedsGreater(Integer num) {
+        String condition = "BedsAvailable > " + num;
+        return roomdao.selectByCondition(condition);
 
-
+    }
 }

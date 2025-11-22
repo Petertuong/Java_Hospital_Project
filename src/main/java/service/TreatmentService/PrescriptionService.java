@@ -17,6 +17,12 @@ public class PrescriptionService extends AbstractService<PrescriptionDAO> implem
 
     @Override
     public Prescription addPrescription(Prescription Prescription) {
+
+        if(Prescription.getDosagePerDay() <= 0 || Prescription.getNumberOfDay() <= 0){
+            System.out.println("Negative value error");
+            return null;
+        }
+
         return prescriptiondao.create(Prescription);
     }
 

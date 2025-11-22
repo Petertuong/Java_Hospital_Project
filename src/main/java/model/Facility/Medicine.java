@@ -31,6 +31,10 @@ public class Medicine {
 		return Quantity;
 	}
 
+	public void setDrugID(int drugid) {
+		DrugID = drugid;
+	}
+
 	public void decreaseStock(int amount) {
 		this.Quantity -= amount;
 	}

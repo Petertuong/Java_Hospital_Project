@@ -18,6 +18,9 @@ public interface IRoomService {
     
     public Room findRoomByNo(Integer roomno);
 
-    public ArrayList<Room> findRoomByBeds(Integer num, boolean compare);
+    public ArrayList<Room> findRoomByBedsSmaller(Integer num);
+
+    public ArrayList<Room> findRoomByBedsGreater(Integer num);
+
 }
 //bedsavaible is just the number of bed in a room

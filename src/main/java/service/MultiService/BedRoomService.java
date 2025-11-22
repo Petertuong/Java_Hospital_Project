@@ -12,6 +12,11 @@ public class BedRoomService {
     private BedService bedS;
     private RoomService roomS;
     
+    public BedRoomService(){
+        this.bedS = new BedService();
+        this.roomS = new RoomService();
+    }
+    
     public int updateBedsAvailable(Integer roomno){
         
         Room room = roomS.findRoomByNo(roomno);

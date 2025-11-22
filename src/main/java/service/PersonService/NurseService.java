@@ -86,6 +86,11 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
         return nurseMin;
     }
 
+    @Override
+    public Integer deleteNurse(Integer k) {
+        return nursedao.delete(k);
+    }
+
 
     
 }
