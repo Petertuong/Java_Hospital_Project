@@ -95,6 +95,21 @@
                     <mainClass>ui.MainApp</mainClass>
                 </configuration>
             </plugin>
+
+            <!-- OpenRewrite: cấu hình tạm để chạy recipe UpgradeToJava21 -->
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <version>5.47.3</version>
+                <configuration>
+                    <activeRecipes>
+                        <activeRecipe>org.openrewrite.java.migrate.UpgradeToJava21</activeRecipe>
+                    </activeRecipes>
+                    <recipeArtifactCoordinates>
+                        <recipeArtifactCoordinate>org.openrewrite.recipe:rewrite-migrate-java:2.31.1</recipeArtifactCoordinate>
+                    </recipeArtifactCoordinates>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
