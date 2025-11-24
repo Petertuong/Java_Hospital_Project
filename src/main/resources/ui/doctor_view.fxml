@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ui.DoctorController"
+      spacing="10"
+      style="-fx-padding: 10;">
+
+    <!-- Tiêu đề -->
+    <Label text="Doctor Management"
+           style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+    <!-- Form thông tin bác sĩ -->
+    <GridPane hgap="10" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="120" halignment="RIGHT"/>
+            <ColumnConstraints minWidth="240" halignment="LEFT"/>
+        </columnConstraints>
+
+        <!-- ID (read-only) -->
+        <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtId"
+                   editable="false"
+                   promptText="(auto)"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <!-- Name -->
+        <Label text="Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtName"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <!-- Phone -->
+        <Label text="Phone:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPhone"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <!-- Gender -->
+        <Label text="Gender:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbGender"
+                  GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <!-- Specialization -->
+        <Label text="Specialization:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbSpecialization"
+                  GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <!-- Qualification -->
+        <Label text="Qualification:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtQualification"
+                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <!-- Nút CRUD -->
+    <HBox spacing="10">
+        <Button fx:id="btnAdd"    text="Add"    minWidth="80"
+                onAction="#handleAddDoctor"/>
+        <Button fx:id="btnUpdate" text="Update" minWidth="80"
+                onAction="#handleUpdateDoctor"/>
+        <Button fx:id="btnDelete" text="Delete" minWidth="80"
+                onAction="#handleDeleteDoctor"/>
+        <Button fx:id="btnClear"  text="Clear"  minWidth="80"
+                onAction="#handleClearForm"/>
+    </HBox>
+
+    <!-- Message -->
+    <Label fx:id="lblMessage" textFill="red"/>
+
+    <!-- Table danh sách bác sĩ -->
+    <TableView fx:id="doctorTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId"
+                         text="ID"
+                         prefWidth="60"/>
+            <TableColumn fx:id="colName"
+                         text="Name"
+                         prefWidth="150"/>
+            <TableColumn fx:id="colPhone"
+                         text="Phone"
+                         prefWidth="120"/>
+            <TableColumn fx:id="colGender"
+                         text="Gender"
+                         prefWidth="80"/>
+            <TableColumn fx:id="colSpecialization"
+                         text="Specialization"
+                         prefWidth="150"/>
+            <TableColumn fx:id="colQualification"
+                         text="Qualification"
+                         prefWidth="150"/>
+        </columns>
+    </TableView>
+
+</VBox>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ui.NurseController"
+      spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Nurse Management"
+           style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+    <!-- Form nhập thông tin nurse -->
+    <GridPane hgap="10" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="120" halignment="RIGHT"/>
+            <ColumnConstraints minWidth="220" halignment="LEFT"/>
+        </columnConstraints>
+
+        <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtId"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"
+                   editable="false"/>
+
+        <Label text="Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtName"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Gender:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbGender"
+                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Phone:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPhone"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Specialization:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtSpecialization"
+                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Patients in charge:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPatientInCharge"
+                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <!-- Nút CRUD -->
+    <HBox spacing="10">
+        <Button fx:id="btnAdd"    text="Add"    minWidth="80"
+                onAction="#handleAddNurse"/>
+        <Button fx:id="btnUpdate" text="Update" minWidth="80"
+                onAction="#handleUpdateNurse"/>
+        <Button fx:id="btnDelete" text="Delete" minWidth="80"
+                onAction="#handleDeleteNurse"/>
+        <Button fx:id="btnClear"  text="Clear"  minWidth="80"
+                onAction="#handleClearForm"/>
+    </HBox>
+
+    <Label fx:id="lblMessage" textFill="red"/>
+
+    <!-- Bảng danh sách nurse -->
+    <TableView fx:id="nurseTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId"
+                         text="ID"           prefWidth="60"/>
+            <TableColumn fx:id="colName"
+                         text="Name"         prefWidth="150"/>
+            <TableColumn fx:id="colGender"
+                         text="Gender"       prefWidth="80"/>
+            <TableColumn fx:id="colPhone"
+                         text="Phone"        prefWidth="120"/>
+            <TableColumn fx:id="colSpecialization"
+                         text="Specialization" prefWidth="150"/>
+            <TableColumn fx:id="colPatientInCharge"
+                         text="Patients"     prefWidth="90"/>
+        </columns>
+    </TableView>
+
+</VBox>

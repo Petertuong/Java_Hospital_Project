@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ui.DiagnosisController"
+      spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Diagnosis Management" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+    <GridPane hgap="10" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="130" halignment="RIGHT"/>
+            <ColumnConstraints minWidth="240" halignment="LEFT"/>
+        </columnConstraints>
+
+        <Label text="Diag ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDiagId" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <Label text="Patient SSN:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtSSN" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <Label text="Result:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextArea fx:id="txtResult" prefRowCount="4" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    </GridPane>
+
+    <HBox spacing="10">
+        <Button fx:id="btnAdd"    text="Add"    minWidth="90" onAction="#handleAddDiagnosis"/>
+        <Button fx:id="btnUpdate" text="Update" minWidth="90" onAction="#handleUpdateDiagnosis"/>
+        <Button fx:id="btnDelete" text="Delete" minWidth="90" onAction="#handleDeleteDiagnosis"/>
+        <Button fx:id="btnClear"  text="Clear"  minWidth="90" onAction="#handleClearForm"/>
+    </HBox>
+
+    <Label fx:id="lblMessage" textFill="red" />
+
+    <TableView fx:id="tblDiagnoses" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colDiagId" text="ID" prefWidth="80" />
+            <TableColumn fx:id="colSSN" text="SSN" prefWidth="140" />
+            <TableColumn fx:id="colResult" text="Result" prefWidth="300" />
+        </columns>
+    </TableView>
+
+</VBox>

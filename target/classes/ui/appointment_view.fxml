@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ui.AppointmentController"
+      spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Appointment Management"
+           style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+    <!-- Form Appointments -->
+    <GridPane hgap="10" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="120" halignment="RIGHT"/>
+            <ColumnConstraints minWidth="220" halignment="LEFT"/>
+        </columnConstraints>
+
+        <Label text="Patient:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbPatient"
+                  GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Doctor:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbDoctor"
+                  GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Date:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dpDate"
+                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Time (HH:MM):" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTime"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Status:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbStatus"
+                  GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Notes:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNotes"
+                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <!-- Buttons -->
+    <HBox spacing="10">
+        <Button fx:id="btnAdd"    text="Add"    minWidth="80"
+                onAction="#handleAddAppointment"/>
+        <Button fx:id="btnUpdate" text="Update" minWidth="80"
+                onAction="#handleUpdateAppointment"/>
+        <Button fx:id="btnDelete" text="Delete" minWidth="80"
+                onAction="#handleDeleteAppointment"/>
+        <Button fx:id="btnClear"  text="Clear"  minWidth="80"
+                onAction="#handleClearForm"/>
+    </HBox>
+
+    <Label fx:id="lblMessage" textFill="red"/>
+
+    <!-- Table Appointments -->
+    <TableView fx:id="appointmentTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colPatient"
+                         text="Patient" prefWidth="140"/>
+            <TableColumn fx:id="colDoctor"
+                         text="Doctor" prefWidth="140"/>
+            <TableColumn fx:id="colDate"
+                         text="Date"    prefWidth="100"/>
+            <TableColumn fx:id="colTime"
+                         text="Time"    prefWidth="80"/>
+            <TableColumn fx:id="colStatus"
+                         text="Status"  prefWidth="120"/>
+            <TableColumn fx:id="colNotes"
+                         text="Notes"   prefWidth="200"/>
+        </columns>
+    </TableView>
+
+</VBox>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ui.BedController"
+      spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Bed Management"
+           style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+    <!-- Form nhập thông tin giường -->
+    <GridPane hgap="10" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="110" halignment="RIGHT"/>
+            <ColumnConstraints minWidth="220" halignment="LEFT"/>
+        </columnConstraints>
+
+        <Label text="Bed No:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtBedNo"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Room No:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtRoomNo"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Occupied:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <CheckBox fx:id="chkOccupied"
+                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Patient SSN:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPatientSsn"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Nurse ID:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNurseId"
+                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <!-- Nút CRUD -->
+    <HBox spacing="10">
+        <Button fx:id="btnAdd"    text="Add"    minWidth="80"
+                onAction="#handleAddBed"/>
+        <Button fx:id="btnUpdate" text="Update" minWidth="80"
+                onAction="#handleUpdateBed"/>
+        <Button fx:id="btnDelete" text="Delete" minWidth="80"
+                onAction="#handleDeleteBed"/>
+        <Button fx:id="btnClear"  text="Clear"  minWidth="80"
+                onAction="#handleClearForm"/>
+    </HBox>
+
+    <Label fx:id="lblMessage" textFill="red"/>
+
+    <!-- Bảng danh sách giường -->
+    <TableView fx:id="bedTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colBedNo"
+                         text="Bed No"      prefWidth="80"/>
+            <TableColumn fx:id="colRoomNo"
+                         text="Room No"     prefWidth="80"/>
+            <TableColumn fx:id="colOccupied"
+                         text="Occupied"    prefWidth="80"/>
+            <TableColumn fx:id="colPatientSsn"
+                         text="Patient SSN" prefWidth="120"/>
+            <TableColumn fx:id="colNurseId"
+                         text="Nurse ID"    prefWidth="80"/>
+        </columns>
+    </TableView>
+
+</VBox>
+

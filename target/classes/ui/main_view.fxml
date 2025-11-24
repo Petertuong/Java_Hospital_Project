@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ui.MainController"
+            style="-fx-background-color: #ffffff;">
+
+    <!-- Header -->
+    <top>
+        <HBox fx:id="headerBar" spacing="10"
+              style="-fx-padding: 10; -fx-background-color: #2c3e50;">
+            <children>
+                <Label text="Hospital Management System"
+                       style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="User: "
+                       style="-fx-text-fill: white;"/>
+                <Label fx:id="lblCurrentUser"
+                       style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+
+                <Label fx:id="lblRoleTag"
+                       style="-fx-text-fill: white; -fx-font-weight: bold;
+                              -fx-padding: 3 8 3 8;
+                              -fx-background-radius: 10;"/>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Sidebar menu -->
+    <left>
+        <VBox spacing="8" style="-fx-padding: 10; -fx-background-color: #ecf0f1;">
+            <children>
+                <Button fx:id="btnDashboard" text="Dashboard" maxWidth="Infinity"
+                        onAction="#showDashboard"/>
+
+                <Separator/>
+
+                <Button fx:id="btnPatients" text="Patients" maxWidth="Infinity"
+                        onAction="#showPatients"/>
+                <Button fx:id="btnPrescriptions" text="Prescriptions" maxWidth="Infinity"
+        onAction="#showPrescriptions"/>
+
+
+                <Separator/>
+
+                <Button fx:id="btnDoctors" text="Doctors" maxWidth="Infinity"
+                        onAction="#showDoctors"/>
+                <Button fx:id="btnNurses" text="Nurses" maxWidth="Infinity"
+                        onAction="#showNurses"/>
+                <Button fx:id="btnRooms" text="Rooms" maxWidth="Infinity"
+                        onAction="#showRooms"/>
+
+                <!-- Nút mới cho Beds -->
+                <Button fx:id="btnBeds" text="Beds" maxWidth="Infinity"
+                        onAction="#showBeds"/>
+
+                <Button fx:id="btnMedicines" text="Medicines" maxWidth="Infinity"
+                        onAction="#showMedicines"/>
+
+                <Separator/>
+
+                <Button fx:id="btnLogout" text="Logout" maxWidth="Infinity"
+                        onAction="#handleLogout"/>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Content Area -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-padding: 10;"/>
+    </center>
+
+</BorderPane>

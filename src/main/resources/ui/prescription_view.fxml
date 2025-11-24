@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ui.PrescriptionController"
+      spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Prescription Management"
+           style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+    <GridPane hgap="10" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="130" halignment="RIGHT"/>
+            <ColumnConstraints minWidth="240" halignment="LEFT"/>
+        </columnConstraints>
+
+        <Label text="Treatment ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTreatmentId"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Drug ID:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDrugId"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Doctor ID:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDoctorId"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Patient SSN:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtSSN"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Dosage / day:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDosagePerDay"
+                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Number of days:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNumberOfDay"
+                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <Label text="Description:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <TextArea fx:id="txtDescription"
+                  prefRowCount="3"
+                  GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="10">
+        <Button fx:id="btnAdd"    text="Add"    minWidth="90"
+                onAction="#handleAddPrescription"/>
+        <Button fx:id="btnUpdate" text="Update" minWidth="90"
+                onAction="#handleUpdatePrescription"/>
+        <Button fx:id="btnDelete" text="Delete" minWidth="90"
+                onAction="#handleDeletePrescription"/>
+        <Button fx:id="btnClear"  text="Clear"  minWidth="90"
+                onAction="#handleClearForm"/>
+    </HBox>
+
+    <Label fx:id="lblMessage" textFill="red"/>
+
+    <TableView fx:id="tblPrescriptions" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colTreatmentId"
+                         text="ID" prefWidth="60"/>
+            <TableColumn fx:id="colDrugId"
+                         text="Drug ID" prefWidth="80"/>
+            <TableColumn fx:id="colDoctorId"
+                         text="Doctor ID" prefWidth="80"/>
+            <TableColumn fx:id="colSSN"
+                         text="SSN" prefWidth="120"/>
+            <TableColumn fx:id="colDosagePerDay"
+                         text="Dosage/Day" prefWidth="100"/>
+            <TableColumn fx:id="colNumberOfDay"
+                         text="Days" prefWidth="70"/>
+        </columns>
+    </TableView>
+
+</VBox>
+
