@@ -37,7 +37,7 @@ public class AdmissionService {
 			patientS.updatePatientStatus(patient);
 		}
 		//get available bed
-		Bed bed = bedS.findAvailableBed().get(0);
+		Bed bed = bedS.findAvailableBed().getFirst();
 		//get the most available nurse
 		Nurse nurse = nurseS.getNurseByMinPID();
 

@@ -74,7 +74,7 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
         
         ArrayList<Nurse> allNurses = listNurse();
 
-        int min = allNurses.get(0).getPatient_in_charge();
+        int min = allNurses.getFirst().getPatient_in_charge();
         Nurse nurseMin = new Nurse();
         for (Nurse nurse: allNurses){
             if(min > nurse.getPatient_in_charge()){

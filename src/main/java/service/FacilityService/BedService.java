@@ -63,7 +63,7 @@ public class BedService extends AbstractService<BedDAO> implements IBedService {
     @Override
     public Bed findBedBySSN(String ssn){
         String condition = "ssn = " + ssn;
-        return beddao.selectByCondition(condition).get(0);
+        return beddao.selectByCondition(condition).getFirst();
     }
 
     @Override
