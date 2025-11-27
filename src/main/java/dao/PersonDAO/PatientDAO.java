@@ -8,9 +8,7 @@ import  dao.MapperUtil;
 import  model.Patients.Patient;
 import  util.DBConnect;
 
-
 public class PatientDAO implements DAOInterface<Patient, String> {
-
 
     @Override
     public Patient create(Patient t) {
@@ -33,7 +31,7 @@ public class PatientDAO implements DAOInterface<Patient, String> {
 
             System.out.println(rows + " rows inserted successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return t;
 
         } catch (SQLException e) {
@@ -45,13 +43,20 @@ public class PatientDAO implements DAOInterface<Patient, String> {
     @Override
     public String update(Patient t) {
        String sql = "UPDATE Patient " +
-                    "Status = ? " +
-                    "WHERE SSN = ?";
+                    "SET fullname = ?, phoneno = ?, gender = ?, dob = ?, " +
+                    "address = ?, emergency_contact = ?, status = ? " +
+                    "WHERE ssn = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, t.getStatus());
-            ps.setString(2, t.getSSN());
+            ps.setString(1, t.getFullname());
+            ps.setString(2, t.getPhoneNo());
+            ps.setString(3, String.valueOf(t.getGender()));
+            ps.setDate(4, t.getDOB());
+            ps.setString(5, t.getAddress());
+            ps.setString(6, t.getEmergencyContact());
+            ps.setString(7, t.getStatus());
+            ps.setString(8, t.getSSN()); // WHERE condition
 
             int rows = ps.executeUpdate();
 
@@ -59,7 +64,7 @@ public class PatientDAO implements DAOInterface<Patient, String> {
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return "Ok";
 
         } catch (SQLException e) {
@@ -83,7 +88,7 @@ public class PatientDAO implements DAOInterface<Patient, String> {
 
             System.out.println(rows + " rows deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return "Ok";
 
         } catch (SQLException e) {
@@ -114,7 +119,7 @@ public class PatientDAO implements DAOInterface<Patient, String> {
 
             System.out.println(count + " rows retrieved!");
 
-            DBConnect.closeConnection(conn);
+            
 
             return patients;
 
@@ -127,7 +132,6 @@ public class PatientDAO implements DAOInterface<Patient, String> {
     @Override
     public Patient selectById(String k) {
 
-        Patient p = new Patient();
         String sql = "SELECT * from Patient WHERE SSN = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -136,17 +140,16 @@ public class PatientDAO implements DAOInterface<Patient, String> {
 
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                p = MapperUtil.mapPatient(rs);
-            }
-            if(rs.wasNull()){
+            if (rs.next()) {
+                Patient p = MapperUtil.mapPatient(rs);
+                System.out.println("Retrieved patient with SSN = " + k + " successfully!");
+                return p;
+            } else {
+                System.out.println("No patient found with SSN = " + k);
                 return null;
-            }            
-            System.out.println("Retrieved patient with SSN = " + k + " successfully!");
+            }
 
-            DBConnect.closeConnection(conn);
-
-            return p;
+            // Connection tự động đóng bởi try-with-resources
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -176,7 +179,7 @@ public class PatientDAO implements DAOInterface<Patient, String> {
 
             System.out.println(count + " rows retrieved!");
 
-            DBConnect.closeConnection(conn);
+            
             
             return patients;
 

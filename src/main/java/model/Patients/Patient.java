@@ -10,7 +10,6 @@ public class Patient extends Person {
 	private String EmergencyContact;
 	private Status status;
 
-	//default constructor
 	public Patient(){
 		super();
 		this.SSN = "";
@@ -38,7 +37,6 @@ public class Patient extends Person {
 		this.status = status;
 	}
 
-	//compare patients by SSN
 	public boolean equals(Patient other){
 		return this.SSN.equals(other.SSN);
 	}
@@ -79,14 +77,7 @@ public class Patient extends Person {
 	}
 
 	public String getStatus() {
-			switch (status) {
-				case Discharge:
-					return "Discharged";
-				case Admit:
-					return "Admitted";
-				default:
-					return "Null";
-			}
+		return status.toString(); // Use enum's toString() method directly
 	}
 
 	@Override

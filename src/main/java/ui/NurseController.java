@@ -10,9 +10,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-public class NurseController {
+public class NurseController implements ReadOnlyController {
 
-    // ==== Form fields ====
+    private boolean readOnlyMode = false;
+
     @FXML
     private TextField txtId;                 // nurse_id (read-only)
     @FXML
@@ -26,7 +27,6 @@ public class NurseController {
     @FXML
     private TextField txtPatientInCharge;
 
-    // ==== Buttons ====
     @FXML
     private Button btnAdd;
     @FXML
@@ -36,11 +36,9 @@ public class NurseController {
     @FXML
     private Button btnClear;
 
-    // ==== Message label ====
     @FXML
     private Label lblMessage;
 
-    // ==== Table & columns ====
         @FXML
         private TableView<Nurse> nurseTable;
         @FXML
@@ -56,16 +54,12 @@ public class NurseController {
         @FXML
         private TableColumn<Nurse, Number> colPatientInCharge;
 
-        // ==== Service nói chuyện với backend (DAO) ====
         private final NurseService nurseService = new NurseService();
 
         // Data cho TableView
         private final ObservableList<Nurse> data =
             FXCollections.observableArrayList();
 
-    // ---------------------------------------------------------
-    // init
-    // ---------------------------------------------------------
     @FXML
     public void initialize() {
 
@@ -104,9 +98,33 @@ public class NurseController {
         loadNursesFromServer();
     }
 
-    // ---------------------------------------------------------
+    // Read-Only Mode Implementation
+
+    @Override
+    public void setReadOnlyMode(boolean readOnly) {
+        this.readOnlyMode = readOnly;
+        
+        if (readOnly) {
+            // STAFF MODE: READ-ONLY access
+            btnAdd.setDisable(true);
+            btnUpdate.setDisable(true);
+            btnDelete.setDisable(true);
+            
+            txtName.setEditable(false);
+            txtPhone.setEditable(false);
+            cbGender.setDisable(true);
+            txtSpecialization.setEditable(false);
+            
+            lblMessage.setText("READ-ONLY MODE: Staff can view but not modify nurse data");
+            lblMessage.setStyle("-fx-text-fill: #2c3e50; -fx-font-style: italic;");
+        } else {
+            // 👑 ADMIN MODE: FULL access
+            lblMessage.setText("");
+        }
+    }
+
     // Helpers map gender
-    // ---------------------------------------------------------
+
     private char mapGenderTextToChar(String text) {
         if (text == null) return 'M';
         switch (text) {
@@ -125,9 +143,8 @@ public class NurseController {
         return "Male";
     }
 
-    // ---------------------------------------------------------
     // Load from backend
-    // ---------------------------------------------------------
+
     private void loadNursesFromServer() {
         try {
             java.util.ArrayList<Nurse> serverData = nurseService.listNurse();
@@ -142,9 +159,8 @@ public class NurseController {
         updateButtonsState();
     }
 
-    // ---------------------------------------------------------
     // Show details in form
-    // ---------------------------------------------------------
+
     private void showNurseDetails(Nurse n) {
         if (n == null) {
             clearForm();
@@ -162,9 +178,8 @@ public class NurseController {
         lblMessage.setText("");
     }
 
-    // ---------------------------------------------------------
     // Clear form
-    // ---------------------------------------------------------
+
     private void clearForm() {
         txtId.clear();
         txtName.clear();
@@ -183,18 +198,16 @@ public class NurseController {
         clearForm();
     }
 
-    // ---------------------------------------------------------
     // Buttons enable/disable
-    // ---------------------------------------------------------
+
     private void updateButtonsState() {
         boolean hasSelection = nurseTable.getSelectionModel().getSelectedItem() != null;
         btnUpdate.setDisable(!hasSelection);
         btnDelete.setDisable(!hasSelection);
     }
 
-    // ---------------------------------------------------------
     // Validation
-    // ---------------------------------------------------------
+
     private String validateFormForAddOrUpdate() {
         String name = txtName.getText();
         if (name == null || name.trim().isEmpty()) {
@@ -229,9 +242,8 @@ public class NurseController {
         }
     }
 
-    // ---------------------------------------------------------
     // Add Nurse
-    // ---------------------------------------------------------
+
     @FXML
     private void handleAddNurse() {
         String error = validateFormForAddOrUpdate();
@@ -254,9 +266,8 @@ public class NurseController {
         }
     }
 
-    // ---------------------------------------------------------
     // Update Nurse
-    // ---------------------------------------------------------
+
     @FXML
     private void handleUpdateNurse() {
         Nurse selected = nurseTable.getSelectionModel().getSelectedItem();
@@ -297,9 +308,8 @@ public class NurseController {
         }
     }
 
-    // ---------------------------------------------------------
     // Delete Nurse
-    // ---------------------------------------------------------
+
     @FXML
     private void handleDeleteNurse() {
         Nurse selected = nurseTable.getSelectionModel().getSelectedItem();
@@ -330,9 +340,6 @@ public class NurseController {
         });
     }
 
-    // ---------------------------------------------------------
-    // Alert helper
-    // ---------------------------------------------------------
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

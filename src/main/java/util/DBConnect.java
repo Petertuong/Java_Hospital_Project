@@ -2,35 +2,31 @@ package  util;
 
 import java.sql.*;
 
-/*
-            String dbURL = "jdbc:mysql://localhost:3306/hms";
-            String userName = "localhost:3306/hms";
-            String password = "java/hms";
- */
+
 public class DBConnect {
     public static Connection getConnection() {
         Connection conn = null;
 
         try {
             String dbURL = "jdbc:mysql://localhost:3306/hms";
-            String userName = "localhost:3306/hms";
-            String password = "java/hms";
+            String userName = "root";
+            String password = "";
+
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                return null;
+            }
+
             conn = DriverManager.getConnection(dbURL, userName, password);
         } catch (SQLException e){
+            e.printStackTrace();
             return null;
         }
 
         return conn;
-    }
-
-    public static void closeConnection(Connection conn) {
-        try {
-            if(conn!=null){
-                conn.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }

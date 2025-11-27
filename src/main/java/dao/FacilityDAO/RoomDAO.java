@@ -13,7 +13,6 @@ import  util.DBConnect;
 
 public class RoomDAO implements DAOInterface<Room, Integer> {
 
-
     @Override
     public Room create(Room t) {
         String sql = "INSERT INTO room (roomno, bedsavailable) VALUES (?, ?)";
@@ -30,7 +29,7 @@ public class RoomDAO implements DAOInterface<Room, Integer> {
 
             System.out.println(rows + " row(s) inserted successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return t;
 
         } catch (SQLException e) {
@@ -56,7 +55,7 @@ public class RoomDAO implements DAOInterface<Room, Integer> {
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return 1;
 
         } catch (SQLException e) {
@@ -80,7 +79,7 @@ public class RoomDAO implements DAOInterface<Room, Integer> {
 
             System.out.println(rows + " row(s) deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return 1;
 
         } catch (SQLException e) {
@@ -111,8 +110,7 @@ public class RoomDAO implements DAOInterface<Room, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-
-            DBConnect.closeConnection(conn);
+            
             return rooms;
 
         } catch (SQLException e) {
@@ -145,7 +143,7 @@ public class RoomDAO implements DAOInterface<Room, Integer> {
             
             System.out.println("Retrieved room with roomno = " + k + " successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return r;
 
         } catch (SQLException e) {
@@ -176,7 +174,7 @@ public class RoomDAO implements DAOInterface<Room, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+            
             return rooms;
 
         } catch (SQLException e) {

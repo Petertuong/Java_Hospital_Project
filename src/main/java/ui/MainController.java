@@ -31,6 +31,8 @@ public class MainController {
     private Button btnPatients;
     @FXML
     private Button btnPrescriptions;
+    @FXML
+    private Button btnDiagnosis;
 
     @FXML
     private Button btnDoctors;
@@ -84,10 +86,11 @@ public class MainController {
 
     private void applyRolePermissions(Role role) {
         if (role == Role.STAFF) {
-            btnDoctors.setDisable(true);
-            btnNurses.setDisable(true);
-            btnRooms.setDisable(true);
-            btnMedicines.setDisable(true);
+            // STAFF can VIEW all modules but in READ-ONLY mode
+            // Don't disable buttons, but pass read-only mode to controllers
+            System.out.println("Staff role: READ-ONLY access enabled for all modules");
+        } else {
+            System.out.println("👑 Admin role: FULL access to all modules");
         }
     }
 
@@ -95,6 +98,16 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/" + fxmlFile));
             Parent view = loader.load();
+            
+            // Pass read-only mode to controllers based on user role
+            Object controller = loader.getController();
+            boolean isReadOnlyMode = SessionManager.getCurrentRole() == Role.STAFF;
+            
+            // Apply read-only mode if controller supports it
+            if (controller instanceof ReadOnlyController) {
+                ((ReadOnlyController) controller).setReadOnlyMode(isReadOnlyMode);
+            }
+            
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,6 +127,11 @@ public class MainController {
     @FXML
     private void showPrescriptions() {
         setContent("prescription_view.fxml");
+    }
+
+    @FXML
+    private void showDiagnosis() {
+        setContent("diagnosis_view.fxml");
     }
     
     @FXML

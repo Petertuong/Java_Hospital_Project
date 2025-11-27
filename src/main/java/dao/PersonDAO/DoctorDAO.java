@@ -13,7 +13,6 @@ import  util.DBConnect;
 
 public class DoctorDAO implements DAOInterface<Doctor, Integer> {
 
-
     @Override
     public Doctor create(Doctor t) {
         String sql = "INSERT INTO doctor (Fullname, Gender, phoneno, qualification, specialization) VALUES (?, ?, ?, ?, ?)";
@@ -33,7 +32,7 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
 
             System.out.println(rows + " rows inserted successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return t;
 
         } catch (SQLException e) {
@@ -58,14 +57,13 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
             ps.setString(idx++, t.getSpecialization());
             ps.setInt(idx, t.getSID());
 
-
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return 1;
 
         } catch (SQLException e) {
@@ -89,7 +87,7 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
 
             System.out.println(rows + " row(s) deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return 1;
 
         } catch (SQLException e) {
@@ -120,7 +118,7 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+            
             return doctors;
 
         } catch (SQLException e) {
@@ -132,7 +130,7 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
     @Override
     public Doctor selectById(Integer k) {
 
-        Doctor d = new Doctor();
+        Doctor d = null;  // Initialize as null
         String sql = "SELECT * from doctor WHERE doctor_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -142,17 +140,18 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
                 d = MapperUtil.mapDoctor(rs);
-
             }
             
-            if(rs.wasNull()){
+            // Check if doctor was found
+            if (d == null) {
+                System.out.println("No doctor found with doctor_id = " + k);
                 return null;
             }
+            
             System.out.println("Retrieved doctor with doctor_id = " + k + " successfully!");
 
-            DBConnect.closeConnection(conn);
+            
             return d;
 
         } catch (SQLException e) {
@@ -184,7 +183,7 @@ public class DoctorDAO implements DAOInterface<Doctor, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+            
             return doctors;
 
         } catch (SQLException e) {

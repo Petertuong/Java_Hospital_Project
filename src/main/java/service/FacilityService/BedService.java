@@ -11,7 +11,8 @@ public class BedService extends AbstractService<BedDAO> implements IBedService {
     BedDAO beddao;
 
     public BedService(){
-        super();
+		super();
+		this.beddao = createEntityDAO();
     }
     @Override
     public BedDAO createEntityDAO() {
@@ -62,8 +63,12 @@ public class BedService extends AbstractService<BedDAO> implements IBedService {
 
     @Override
     public Bed findBedBySSN(String ssn){
-        String condition = "ssn = " + ssn;
-        return beddao.selectByCondition(condition).getFirst();
+        String condition = "b.ssn = '" + ssn + "'";  // Specify table prefix 'b.'
+        ArrayList<Bed> beds = beddao.selectByCondition(condition);
+        if (beds == null || beds.isEmpty()) {
+            return null;
+        }
+        return beds.getFirst();
     }
 
     @Override

@@ -3,6 +3,7 @@ package  dao;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import  model.Facility.*;
 import  model.Patients.Patient;
@@ -12,14 +13,27 @@ import  model.Treatment.*;
 public class MapperUtil {
     public static Patient mapPatient(ResultSet rs) throws SQLException {
         String ssn = rs.getString("ssn");
-        String name = rs.getString("name");
+        String name = rs.getString("fullname");
         String address = rs.getString("address");
         String phoneno = rs.getString("phoneno");
-        char gender = rs.getString("gender").charAt(0);
+        String _g = rs.getString("gender");
+        char gender = (_g == null || _g.isEmpty()) ? 'U' : _g.charAt(0);
         String emergencyContact = rs.getString("emergency_contact");
         Date dob = rs.getDate("dob");
-        Status status = Status.valueOf(rs.getString("status"));
-
+        String statusStr = rs.getString("status");
+        Status status;
+        if (statusStr == null) {
+            status = Status.Null;
+        } else {
+            try {
+                status = Status.valueOf(statusStr);
+            } catch (IllegalArgumentException ex) {
+                status = Arrays.stream(Status.values())
+                        .filter(s -> s.toString().equalsIgnoreCase(statusStr))
+                        .findFirst()
+                        .orElse(Status.Null);
+            }
+        }
 
         Patient p = new Patient(name, phoneno, gender, ssn, dob, address, emergencyContact, status);
 
@@ -29,7 +43,8 @@ public class MapperUtil {
     public static Doctor mapDoctor(ResultSet rs) throws SQLException{
         int doctor_id = rs.getInt("doctor_id");
         String fullname = rs.getString("fullname");
-        char gender = rs.getString("gender").charAt(0);
+        String _dg = rs.getString("gender");
+        char gender = (_dg == null || _dg.isEmpty()) ? 'U' : _dg.charAt(0);
         String phoneno = rs.getString("phoneno");
         String qual = rs.getString("qualification");
         String spec = rs.getString("specialization");
@@ -42,7 +57,8 @@ public class MapperUtil {
     public static Nurse mapNurse(ResultSet rs) throws SQLException{
         int nurse_id = rs.getInt("nurse_id");
         String fullname = rs.getString("fullname");
-        char gender = rs.getString("gender").charAt(0);
+        String _ng = rs.getString("gender");
+        char gender = (_ng == null || _ng.isEmpty()) ? 'U' : _ng.charAt(0);
         String phoneno = rs.getString("phoneno");
         String spec = rs.getString("specialization");
         int p_incharge = rs.getInt("patient_in_charge");
@@ -68,10 +84,18 @@ public class MapperUtil {
             //bed
             int bedno = rs.getInt("bedno");
             boolean isOccupied = rs.getBoolean("is_occupied");
-            //patient
-            Patient p = MapperUtil.mapPatient(rs);
-            //nurse
-            Nurse n = MapperUtil.mapNurse(rs);
+            
+            //patient - check if exists
+            Patient p = null;
+            if (rs.getString("ssn") != null) {
+                p = MapperUtil.mapPatient(rs);
+            }
+            
+            //nurse - check if exists  
+            Nurse n = null;
+            if (rs.getObject("nurse_id") != null) {
+                n = MapperUtil.mapNurse(rs);
+            }
 
             Bed b = new Bed(r, bedno, isOccupied, p, n);
 
@@ -79,9 +103,9 @@ public class MapperUtil {
     }
 
     public static Medicine mapMedicine(ResultSet rs) throws SQLException{
-        String drugname = rs.getString("DrugName");
-        int drugid = rs.getInt("Drug_ID");
-        int quantity = rs.getInt("Quantity");
+        String drugname = rs.getString("drugname");
+        int drugid = rs.getInt("drug_id");
+        int quantity = rs.getInt("quantity");
 
         Medicine m = new Medicine(drugid, drugname, quantity);
 

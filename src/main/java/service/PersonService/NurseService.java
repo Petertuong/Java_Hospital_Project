@@ -10,7 +10,8 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
 
     NurseDAO nursedao;
 	public NurseService(){
-		super();
+        super();
+        this.nursedao = createEntityDAO();
 	}
 
 	@Override
@@ -28,7 +29,8 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
 
         if(nurse.getPatient_in_charge() < 50){
            nurse.incrPatient_in_charge();
-           return nursedao.update(nurse);
+           // Use the specialized method to avoid fullname constraint issues
+           return nursedao.updatePatientCount(nurse.getSID(), nurse.getPatient_in_charge());
         }
 
         return -1;
@@ -40,7 +42,8 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
 
         if(nurse.getPatient_in_charge() > 0){
             nurse.decrPatient_in_charge();
-            return nursedao.update(nurse);
+            // Use the specialized method to avoid fullname constraint issues
+            return nursedao.updatePatientCount(nurse.getSID(), nurse.getPatient_in_charge());
         }
 
         return -1;
@@ -73,11 +76,16 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
     public Nurse getNurseByMinPID() {
         
         ArrayList<Nurse> allNurses = listNurse();
+        
+        if (allNurses.isEmpty()) {
+            return null; // No nurses available
+        }
 
-        int min = allNurses.getFirst().getPatient_in_charge();
-        Nurse nurseMin = new Nurse();
+        Nurse nurseMin = allNurses.getFirst(); // Start with first nurse
+        int min = nurseMin.getPatient_in_charge();
+        
         for (Nurse nurse: allNurses){
-            if(min > nurse.getPatient_in_charge()){
+            if(nurse.getPatient_in_charge() < min){
                 min = nurse.getPatient_in_charge();
                 nurseMin = nurse;
             }
@@ -95,7 +103,6 @@ public class NurseService extends AbstractService<NurseDAO> implements INurseSer
     public Integer updateNurse(Nurse nurse) {
         return nursedao.update(nurse);
     }
-
 
     
 }

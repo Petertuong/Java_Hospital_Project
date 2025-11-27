@@ -16,10 +16,8 @@ public class Prescription {
 	private String description; //nullable
 
 	public Prescription() {
-		// default constructor
 	}
 
-	// for loading from database
 	public Prescription(Medicine Medicine, int DosagePerDay, int NumberOfDay, int TreatmentID, Patient patient,
 			Doctor Doctor, String description) {
 
@@ -33,7 +31,6 @@ public class Prescription {
 		Total = DosagePerDay * NumberOfDay;
 	}
 
-	// overload constructor (for creating new object)
 	public Prescription(Medicine Medicine, int DosagePerDay, int NumberOfDay, Patient patient, Doctor Doctor,
 			String description) {
 

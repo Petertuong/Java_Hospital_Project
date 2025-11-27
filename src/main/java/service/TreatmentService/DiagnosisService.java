@@ -10,11 +10,15 @@ public class DiagnosisService extends AbstractService<DiagnosisDAO> implements I
 
     DiagnosisDAO diagnosisdao;
 
+    public DiagnosisService(){
+        super();
+        this.diagnosisdao = createEntityDAO();
+    }
+
     @Override
     public DiagnosisDAO createEntityDAO() {
         return new DiagnosisDAO();
     }
-
 
     @Override
     public Diagnosis addDiagnosis(Diagnosis Diagnosis) {

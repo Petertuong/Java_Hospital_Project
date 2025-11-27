@@ -42,9 +42,14 @@
                            maxWidth="250"/>
 
                 <Label text="Password:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <PasswordField fx:id="txtPassword"
-                               GridPane.rowIndex="1" GridPane.columnIndex="1"
-                               maxWidth="250"/>
+                <StackPane GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="250">
+                    <PasswordField fx:id="txtPassword" visible="true"/>
+                    <TextField fx:id="txtPasswordVisible" visible="false"/>
+                </StackPane>
+
+                <CheckBox fx:id="chkShowPassword" text="Show Password" 
+                          GridPane.rowIndex="2" GridPane.columnIndex="1"
+                          onAction="#handleTogglePasswordVisibility"/>
             </GridPane>
 
             <!-- Hàng nút -->

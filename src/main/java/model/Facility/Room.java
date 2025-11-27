@@ -13,7 +13,6 @@ public class Room {
 		this.RoomNo = RoomNo;
 	}
 
-	// constructor for loading room
 	public Room(int RoomNo, int BedsAvailable) {
 		this.RoomNo = RoomNo;
 		this.BedsAvailable = BedsAvailable;

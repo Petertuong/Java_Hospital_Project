@@ -11,7 +11,8 @@ public class RoomService extends AbstractService<RoomDAO> implements IRoomServic
     RoomDAO roomdao;
 
     public RoomService(){
-        super();
+		super();
+		this.roomdao = createEntityDAO();
     }
 
     @Override

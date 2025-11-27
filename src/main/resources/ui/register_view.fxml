@@ -25,12 +25,20 @@
                                    GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
                         <Label text="Password:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                        <PasswordField fx:id="txtPassword"
-                                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <StackPane GridPane.rowIndex="1" GridPane.columnIndex="1">
+                            <PasswordField fx:id="txtPassword" visible="true"/>
+                            <TextField fx:id="txtPasswordVisible" visible="false"/>
+                        </StackPane>
 
                         <Label text="Confirm Password:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                        <PasswordField fx:id="txtConfirmPassword"
-                                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1">
+                            <PasswordField fx:id="txtConfirmPassword" visible="true"/>
+                            <TextField fx:id="txtConfirmPasswordVisible" visible="false"/>
+                        </StackPane>
+
+                        <CheckBox fx:id="chkShowPassword" text="Show Password" 
+                                  GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                  onAction="#handleTogglePasswordVisibility"/>
                     </children>
                 </GridPane>
 

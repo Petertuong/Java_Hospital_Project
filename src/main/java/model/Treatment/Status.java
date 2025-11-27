@@ -4,7 +4,7 @@ public enum Status {
 
 	Discharge("Discharged"),
 	Admit("Admitted"),
-	Null("null");
+	Null("Waiting"); // Change from "null" to "Waiting"
 
 	private final String state;
 

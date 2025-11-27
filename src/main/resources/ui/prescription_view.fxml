@@ -74,6 +74,8 @@
                          text="Dosage/Day" prefWidth="100"/>
             <TableColumn fx:id="colNumberOfDay"
                          text="Days" prefWidth="70"/>
+            <TableColumn fx:id="colDescription"
+                         text="Description" prefWidth="150"/>
         </columns>
     </TableView>
 

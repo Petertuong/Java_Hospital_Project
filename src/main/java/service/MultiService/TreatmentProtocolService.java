@@ -3,7 +3,6 @@ package service.MultiService;
 import model.Facility.Medicine;
 import model.Treatment.Prescription;
 import service.FacilityService.MedicineService;
-import service.TreatmentService.DiagnosisService;
 import service.TreatmentService.PrescriptionService;
 
 public class TreatmentProtocolService{
@@ -25,13 +24,11 @@ public class TreatmentProtocolService{
             return "Failed";
         }
 
-        med.decreaseStock(prescription.getTotal());
-
-        medicineS.decreaseMedicineStock(med);
+        Medicine decreaseAmount = new Medicine(med.getDrugID(), med.getDrugName(), prescription.getTotal());
+        medicineS.decreaseMedicineStock(decreaseAmount);
         prescriptionS.addPrescription(prescription);
 
         return "Ok";
     }
-
 
 }

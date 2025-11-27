@@ -11,7 +11,8 @@ public class MedicineService extends AbstractService<MedicineDAO> implements IMe
     MedicineDAO medicinedao;
 
     public MedicineService(){
-        super();
+		super();
+		this.medicinedao = createEntityDAO();
     }
 
     @Override
@@ -27,7 +28,11 @@ public class MedicineService extends AbstractService<MedicineDAO> implements IMe
     @Override
     public Integer fillMedicineStock(Medicine Medicine) {
         Medicine med = this.findMedicineByNo(Medicine.getDrugID());
-        med.fillStock(Medicine.getQuantity()); // here, Quantity represents the amount to add
+        if (med == null) {
+            System.err.println("Medicine with ID " + Medicine.getDrugID() + " not found!");
+            return 0;
+        }
+        med.fillStock(Medicine.getQuantity());
         return medicinedao.update(med);
     }
 
@@ -58,6 +63,5 @@ public class MedicineService extends AbstractService<MedicineDAO> implements IMe
         String condition = "drugname = " + name;
         return medicinedao.selectByCondition(condition);
     }
-
 
 }

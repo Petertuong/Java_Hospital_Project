@@ -7,7 +7,6 @@ public abstract class Person {
 	private char Gender;
 
 	public Person(){
-		//default constructor
 	}
 	
 	public Person(String name, String number, char gender){

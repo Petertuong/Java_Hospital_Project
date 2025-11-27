@@ -11,7 +11,8 @@ public class DoctorService extends AbstractService<DoctorDAO> implements IDoctor
 	DoctorDAO doctordao;
 
 	public DoctorService(){
-		super();
+        super();
+        this.doctordao = createEntityDAO();
 	}
 
 	@Override

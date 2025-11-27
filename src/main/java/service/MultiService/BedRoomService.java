@@ -26,12 +26,14 @@ public class BedRoomService {
         int count;
         roomS.setBedsavailablezero(room);
         for (count = 0; count <= allBeds.size(); count++){
-            roomS.incrBedsavailable(room);
+            for (Bed bed : allBeds){
+                if (bed.isOccupied() == false){
+                    roomS.incrBedsavailable(room);
+                }
+            }
         }
 
         return count;
     }
-
-
 
 }

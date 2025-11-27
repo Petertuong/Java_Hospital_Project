@@ -11,7 +11,6 @@ public class Bed {
 	private Patient patient;
 	private Nurse nurse;
 
-	//default constructor
 	public Bed() {};
 	//loading constructor
 	public Bed(Room room, int bedNo, boolean isOccupied, Patient patient, Nurse nurse) {
@@ -60,11 +59,9 @@ public class Bed {
 		IsOccupied = isOccupied;
 	}
 
-
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
 
 	public void setNurse(Nurse nurse) {
 		this.nurse = nurse;

@@ -1,12 +1,10 @@
-@echo off
-REM Simple runner for HMS.jar — assumes Java and JavaFX available on module path if needed
-setlocal
-set JAR=target\HMS.jar
-if not exist "%JAR%" (
-    echo JAR not found. Please run: mvn -DskipTests clean package
-    exit /b 1
-)
+﻿@echo off
+echo Starting Hospital Management System...
+set JAVA_HOME=C:\Program Files\Microsoft\jdk-21.0.9.10-hotspot
+set PATH=%JAVA_HOME%\bin;%PATH%
+set DB_URL=jdbc:mysql://127.0.0.1:3306/hospital?serverTimezone=UTC
+set DB_USER=hospitaluser
+set DB_PASS=hospital_password
 
-echo Running HMS...
-java -jar "%JAR%"
-endlocal
+mvn clean compile
+mvn javafx:run

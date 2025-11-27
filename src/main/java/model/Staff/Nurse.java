@@ -5,15 +5,12 @@ public class Nurse extends StaffClass {
 	private int Patient_in_charge = 0;
 
 	public Nurse(){
-		//default constructor
 	}
-	//constructor for loading new object
 	public Nurse(String name, String number, char gender, int SID, String Specification, int patient_in_charge){
 		super(name, number, gender, SID, Specification);
 		this.Patient_in_charge = patient_in_charge;
 	}
 
-	//overloading constructor for creating new object
 	public Nurse(String name, String number, char gender, String Specification){
 		super(name, number, gender, Specification);
 	}
@@ -22,16 +19,17 @@ public class Nurse extends StaffClass {
 		return Patient_in_charge;
 	}
 
-	//when a new patient is assigned -> increase count
 	public void incrPatient_in_charge() {
 		Patient_in_charge += 1;
 	}
 	
-	//when a patient is discharged -> decrease count
 	public void decrPatient_in_charge() {
 		Patient_in_charge -= 1;
 	}
-
+	
+	public void setPatient_in_charge(int count) {
+		Patient_in_charge = count;
+	}
 
 	@Override
 	public String getRole(){
