@@ -20,5 +20,4 @@ public interface IDoctorService {
 
     public ArrayList<Doctor> findDoctorByQualification(String qual);
 
-
 }

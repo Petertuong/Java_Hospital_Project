@@ -5,15 +5,13 @@ public class Room {
 	private int RoomNo;
 	private int BedsAvailable = 0;
 
-	public Room() {
-	}; // default constructor
+	public Room() {}; // default constructor
 
 	// constructor for creating room
 	public Room(int RoomNo) {
 		this.RoomNo = RoomNo;
 	}
-
-	// constructor for loading room
+	//constructor for loading room
 	public Room(int RoomNo, int BedsAvailable) {
 		this.RoomNo = RoomNo;
 		this.BedsAvailable = BedsAvailable;

@@ -15,7 +15,7 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
 
     @Override
     public Nurse create(Nurse t) {
-        String sql = "INSERT INTO nurse (Fullname, Gender, phoneno, specialization) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO nurse (fullname, gender, phoneno, specialization) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -31,7 +31,7 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
 
             System.out.println(rows + " row(s) inserted successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return t;
 
         } catch (SQLException e) {
@@ -43,7 +43,7 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
     @Override
     public Integer update(Nurse t) {
            String sql = "UPDATE nurse " +
-                "SET Fullname = ?, Gender = ?, phoneno = ?, specialization = ?, Patient_in_charge = ? " +
+                "SET fullname = ?, gender = ?, phoneno = ?, specialization = ?, patient_in_charge = ? " +
                 "WHERE nurse_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -56,14 +56,13 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
             ps.setInt(idx++, t.getPatient_in_charge());
             ps.setInt(idx, t.getSID());
 
-
             int rows = ps.executeUpdate();
 
             if (rows == 0) return null;
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return t.getPatient_in_charge();
 
         } catch (SQLException e) {
@@ -71,7 +70,30 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
             return 0;
         }
     }
+    //Khanh
+    // Method to update only patient count - avoids fullname unique constraint issues
+    public Integer updatePatientCount(int nurseId, int newPatientCount) {
+        String sql = "UPDATE nurse SET patient_in_charge = ? WHERE nurse_id = ?";
+        try (Connection conn = DBConnect.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            ps.setInt(1, newPatientCount);
+            ps.setInt(2, nurseId);
+
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) return null;
+
+            System.out.println(rows + " row(s) nurse patient count updated successfully!");
+
+
+            return newPatientCount;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
     @Override
     public ArrayList<Nurse> selectAll() {
@@ -95,7 +117,7 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
             return nurses;
 
         } catch (SQLException e) {
@@ -117,18 +139,15 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
 
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-
-                n = MapperUtil.mapNurse(rs);
-            }
-
-            if(rs.wasNull()){
+            if (!rs.next()) {
                 return null;
             }
+
+            n = MapperUtil.mapNurse(rs);
             
             System.out.println("Retrieved nurse with SID = " + k + " successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return n;
 
         } catch (SQLException e) {
@@ -158,7 +177,7 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
 
             System.out.println(count + " rows(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
             return nurses;
 
         } catch (SQLException e) {
@@ -182,7 +201,7 @@ public class NurseDAO implements DAOInterface<Nurse, Integer> {
 
             System.out.println(rows + " rows deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return 1;
 
         } catch (SQLException e) {

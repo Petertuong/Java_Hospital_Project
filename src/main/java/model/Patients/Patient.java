@@ -2,6 +2,7 @@ package  model.Patients;
 
 import java.sql.Date;
 import  model.Treatment.Status;
+
 public class Patient extends Person {
 
 	private String SSN;
@@ -9,8 +10,7 @@ public class Patient extends Person {
 	private String Address;
 	private String EmergencyContact;
 	private Status status;
-
-	//default constructor
+	//default
 	public Patient(){
 		super();
 		this.SSN = "";
@@ -19,7 +19,7 @@ public class Patient extends Person {
 		this.EmergencyContact = "";
 		this.status = Status.Null;
 	}
-
+	//create
 	public Patient(String name, String number, char gender, String SSN, Date DOB, String Address, String EmergencyContact){
 		super(name, number, gender);
 		this.SSN = SSN;
@@ -28,7 +28,7 @@ public class Patient extends Person {
 		this.EmergencyContact = EmergencyContact;
 		this.status = Status.Null;
 	}
-
+	//load
 	public Patient(String name, String number, char gender, String SSN, Date DOB, String Address, String EmergencyContact, Status status){
 		super(name, number, gender);
 		this.SSN = SSN;
@@ -37,8 +37,7 @@ public class Patient extends Person {
 		this.EmergencyContact = EmergencyContact;
 		this.status = status;
 	}
-
-	//compare patients by SSN
+	//compare
 	public boolean equals(Patient other){
 		return this.SSN.equals(other.SSN);
 	}
@@ -79,14 +78,7 @@ public class Patient extends Person {
 	}
 
 	public String getStatus() {
-			switch (status) {
-				case Discharge:
-					return "Discharged";
-				case Admit:
-					return "Admitted";
-				default:
-					return "Null";
-			}
+		return status.toString(); 
 	}
 
 	@Override

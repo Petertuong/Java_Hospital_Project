@@ -30,8 +30,6 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
 
             System.out.println(rows + " row(s) inserted successfully!");
 
-            DBConnect.closeConnection(conn);
-
             return t;
 
         } catch (SQLException e) {
@@ -58,7 +56,7 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+
 
             return 1;
 
@@ -83,7 +81,7 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
 
             System.out.println(rows + " row(s) deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+
 
             return 1;
 
@@ -116,7 +114,7 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
 
             return diags;
 
@@ -149,7 +147,7 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
             }           
             System.out.println("Retrieved diagnosis with diag_id = " + k + " successfully!");
 
-            DBConnect.closeConnection(conn);
+
 
             return d;
 
@@ -182,7 +180,7 @@ public class DiagnosisDAO implements DAOInterface<Diagnosis, Integer>{
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
 
             return diags;
 

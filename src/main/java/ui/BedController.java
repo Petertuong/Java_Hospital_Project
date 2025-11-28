@@ -2,11 +2,8 @@ package ui;
 
 import model.Facility.Bed;
 import model.Facility.Room;
-import model.Patients.Patient;
-import model.Staff.Nurse;
 import service.FacilityService.BedService;
-import service.PersonService.PatientService;
-import service.PersonService.NurseService;
+import service.FacilityService.RoomService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,12 +49,20 @@ public class BedController {
     private TableColumn<Bed, String> colNurseId;
 
     private final BedService bedService = new BedService();
-    private final PatientService patientService = new PatientService();
-    private final NurseService nurseService = new NurseService();
+    private final RoomService roomService = new RoomService();
     private final ObservableList<Bed> data = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        // Disable auto-managed fields - these are controlled by admit/discharge workflow
+        chkOccupied.setDisable(true);
+        txtPatientSsn.setDisable(true);
+        txtNurseId.setDisable(true);
+        
+        chkOccupied.setTooltip(new Tooltip("Auto-managed by patient admit/discharge"));
+        txtPatientSsn.setPromptText("Auto-assigned during patient admission");
+        txtNurseId.setPromptText("Auto-assigned during patient admission");
+        
         colBedNo.setCellValueFactory(cd ->
             new SimpleStringProperty(
                 String.valueOf(cd.getValue().getBedNo())
@@ -153,7 +158,7 @@ public class BedController {
             return "Room No is required.";
         }
 
-        // patient SSN, nurse ID có thể để trống => optional
+        // Occupied, Patient SSN, and Nurse ID are auto-managed - no validation needed
         return null;
     }
 
@@ -167,20 +172,22 @@ public class BedController {
 
         int bedNo = Integer.parseInt(txtBedNo.getText().trim());
         int roomNo = Integer.parseInt(txtRoomNo.getText().trim());
-        boolean occupied = chkOccupied.isSelected();
-        String ssn = txtPatientSsn.getText();
-        String nurseIdStr = txtNurseId.getText();
+        
         try {
             Room room = new Room();
             room.setRoomNo(roomNo);
-            Patient p = (ssn != null && !ssn.trim().isEmpty()) ? patientService.findPatientById(ssn.trim()) : null;
-            Nurse n = (nurseIdStr != null && !nurseIdStr.trim().isEmpty()) ? nurseService.findNurseByID(Integer.parseInt(nurseIdStr.trim())) : null;
+            // Create bed with default values (unoccupied, no patient/nurse assigned)
             Bed dto = new Bed(room, bedNo);
-            dto.setOccupied(occupied);
-            dto.setPatient(p);
-            dto.setNurse(n);
+            dto.setOccupied(false);  // Default to not occupied
+            dto.setPatient(null);    // No patient assigned initially
+            dto.setNurse(null);      // No nurse assigned initially
+            
             bedService.addBed(dto);
-            lblMessage.setText("Bed added successfully.");
+            
+            // Auto-sync room bed availability
+            roomService.updateRoomBedAvailability(roomNo);
+            
+            lblMessage.setText("Bed added successfully. Occupancy will be managed by admit/discharge workflow.");
             loadBedsFromServer();
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,20 +212,28 @@ public class BedController {
 
         int bedNo = Integer.parseInt(txtBedNo.getText().trim());
         int roomNo = Integer.parseInt(txtRoomNo.getText().trim());
-        boolean occupied = chkOccupied.isSelected();
-        String ssn = txtPatientSsn.getText();
-        String nurseIdStr = txtNurseId.getText();
+        
         try {
             Room room = new Room();
             room.setRoomNo(roomNo);
-            Patient p = (ssn != null && !ssn.trim().isEmpty()) ? patientService.findPatientById(ssn.trim()) : null;
-            Nurse n = (nurseIdStr != null && !nurseIdStr.trim().isEmpty()) ? nurseService.findNurseByID(Integer.parseInt(nurseIdStr.trim())) : null;
+            
+            // Only update bed number and room - keep existing occupancy data
             Bed dto = new Bed(room, bedNo);
-            dto.setOccupied(occupied);
-            dto.setPatient(p);
-            dto.setNurse(n);
+            dto.setOccupied(selected.isOccupied());     // Keep current occupancy status
+            dto.setPatient(selected.getPatient());      // Keep current patient assignment
+            dto.setNurse(selected.getNurse());          // Keep current nurse assignment
+            
+            int oldRoomNo = selected.getRoom() != null ? selected.getRoom().getRoomNo() : roomNo;
+            
             bedService.updateBed(dto);
-            lblMessage.setText("Bed updated successfully.");
+            
+            // Auto-sync room bed availability for both old and new rooms
+            roomService.updateRoomBedAvailability(oldRoomNo);
+            if (oldRoomNo != roomNo) {
+                roomService.updateRoomBedAvailability(roomNo);
+            }
+            
+            lblMessage.setText("Bed updated successfully. Occupancy is managed by admit/discharge workflow.");
             loadBedsFromServer();
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,8 +258,16 @@ public class BedController {
         alert.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
                 try {
+                    int deletedRoomNo = selected.getRoom() != null ? selected.getRoom().getRoomNo() : 0;
+                    
                     bedService.delete(selected.getBedNo());
-                    lblMessage.setText("Bed deleted successfully.");
+                    
+                    // Auto-sync room bed availability after deletion
+                    if (deletedRoomNo > 0) {
+                        roomService.updateRoomBedAvailability(deletedRoomNo);
+                    }
+                    
+                    lblMessage.setText("Bed deleted successfully. Room availability updated.");
                     loadBedsFromServer();
                     clearForm();
                 } catch (Exception e) {

@@ -30,12 +30,27 @@ public class AdmissionService {
 		Patient patient = patientS.findPatientById(ssn);
 
 		//prevent duplicate admission
-		if(patient.getStatus().equals("Admitted")){
+		if(patient.getStatus().toString().equals("Admitted")){
 			return "already admitted";
-		}else{
-			patient.setStatus(Status.Admit);
-			patientS.updatePatientStatus(patient);
 		}
+		
+		// IMPORTANT: Check if patient has any existing bed assignment and clean it up first
+		Bed existingBed = bedS.findBedBySSN(ssn);
+		if(existingBed != null) {
+			// Clean up existing assignment
+			if(existingBed.getNurse() != null) {
+				nurseS.decrPID(existingBed.getNurse());
+			}
+			existingBed.setOccupied(false);
+			existingBed.setPatient(null);
+			existingBed.setNurse(null);
+			bedS.updateBedStatus(existingBed);
+		}
+		
+		// Now proceed with new admission
+		patient.setStatus(Status.Admit);
+		patientS.updatePatientStatus(patient);
+		
 		//get available bed
 		Bed bed = bedS.findAvailableBed().getFirst();
 		//get the most available nurse
@@ -53,26 +68,44 @@ public class AdmissionService {
 	}
 
 	public String dischargePatient(String ssn) {
+		return dischargePatient(ssn, Status.Discharge); // Default to Discharged
+	}
+	
+	
+	public String dischargePatient(String ssn, Status newStatus) {
 		
 		//retrieve patient
 		Patient patient = patientS.findPatientById(ssn);
 
-		//prevent duplicate admission
-		if(patient.getStatus().equals("Discharged")){
+		//prevent duplicate discharge - check if patient is currently admitted
+		if(!patient.getStatus().toString().equals("Admitted")){
 			return "already discharged";
-		}else{
-			patient.setStatus(Status.Discharge);
-			patientS.updatePatientStatus(patient);
 		}
-
-		//get available bed
+		
+		//get the bed this patient is occupying FIRST
 		Bed bed = bedS.findBedBySSN(ssn);
-		//decr nurse PID
-		nurseS.decrPID(bed.getNurse());
-		//update bed status
+		if (bed == null) {
+			// Still update patient status even if bed not found
+			patient.setStatus(newStatus);
+			patientS.updatePatientStatus(patient);
+			return "discharged (bed not found) - status set to " + newStatus;
+		}
+		
+		//decr nurse PID BEFORE clearing bed
+		if(bed.getNurse() != null) {
+			nurseS.decrPID(bed.getNurse());
+		}
+		
+		//update bed status - clear patient and nurse assignment
 		bed.setOccupied(false);
+		bed.setPatient(null);
+		bed.setNurse(null);
 		bedS.updateBedStatus(bed);
+		
+		// Set patient status to specified status AFTER clearing bed
+		patient.setStatus(newStatus);
+		patientS.updatePatientStatus(patient);
 
-		return "discharged";		
+		return "discharged - status set to " + newStatus;		
 	}
 }

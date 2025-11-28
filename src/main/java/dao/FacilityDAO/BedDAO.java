@@ -11,7 +11,6 @@ import dao.MapperUtil;
 import model.Facility.Bed;
 import util.DBConnect;
 
-
 public class BedDAO implements DAOInterface<Bed, Integer> {
 
     public static BedDAO getInstance() {
@@ -34,7 +33,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
 
             System.out.println(rows + " row(s) inserted successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return t;
 
         } catch (SQLException e) {
@@ -45,9 +44,9 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
 
     @Override
     public Integer update(Bed t) {
-       String sql = "UPDATE bed " +
-                    "SET is_occupied = ?, nurse_id = ?, ssn = ?" + 
-                    "WHERE bedno = ?";
+    String sql = "UPDATE bed " +
+              "SET is_occupied = ?, nurse_id = ?, ssn = ? " + 
+              "WHERE bedno = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -59,9 +58,10 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
             }else{
                 ps.setBoolean(idx++, false);
                 ps.setNull(idx++, java.sql.Types.INTEGER);
-                ps.setNull(idx, java.sql.Types.VARCHAR);
+                ps.setNull(idx++, java.sql.Types.VARCHAR);
             }
-
+            
+            ps.setInt(idx, t.getBedNo());
 
             int rows = ps.executeUpdate();
 
@@ -69,7 +69,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return 1;
 
         } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
 
             System.out.println(rows + " row(s) deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return 1;
 
         } catch (SQLException e) {
@@ -106,10 +106,10 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
     @Override
     public ArrayList<Bed> selectAll() {
         ArrayList<Bed> beds = new ArrayList<>();
-        String sql = "SELECT * from bed b" +
-                    "LEFT OUTER JOIN patient p ON (b.ssn = p.ssn)" +
-                    "LEFT OUTER JOIN nurse n ON (b.nurse_id = n.nurse_id)" +
-                    "JOIN room r ON (b.roomno = r.roomno)";
+        String sql = "SELECT * from bed b " +
+                "LEFT OUTER JOIN patient p ON (b.ssn = p.ssn) " +
+                "LEFT OUTER JOIN nurse n ON (b.nurse_id = n.nurse_id) " +
+                "JOIN room r ON (b.roomno = r.roomno)";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -128,7 +128,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
             return beds;
 
         } catch (SQLException e) {
@@ -141,11 +141,11 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
     public Bed selectById(Integer k) {
 
         Bed b = new Bed();
-        String sql = "SELECT * from bed b" +
-                    "LEFT OUTER JOIN patient p ON (b.ssn = p.ssn)" +
-                    "LEFT OUTER JOIN nurse n ON (b.nurse_id = n.nurse_id)" +
-                    "JOIN room r ON (b.roomno = r.roomno)" +
-                    "WHERE bedno = ?";
+        String sql = "SELECT * from bed b " +
+                "LEFT OUTER JOIN patient p ON (b.ssn = p.ssn) " +
+                "LEFT OUTER JOIN nurse n ON (b.nurse_id = n.nurse_id) " +
+                "JOIN room r ON (b.roomno = r.roomno) " +
+                "WHERE bedno = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
             
@@ -153,17 +153,15 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
 
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                b = MapperUtil.mapBed(rs);
-            }
-            
-            if(rs.wasNull()){
+            if (!rs.next()) {
                 return null;
             }
             
+            b = MapperUtil.mapBed(rs);
+            
             System.out.println("Retrieved bed with bedno = " + k + " successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return b;
 
         } catch (SQLException e) {
@@ -175,11 +173,11 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
     @Override
     public ArrayList<Bed> selectByCondition(String condition) {
         ArrayList<Bed> beds = new ArrayList<>();
-        String sql = "SELECT * from bed b" +
-                    "LEFT OUTER JOIN patient p ON (b.ssn = p.ssn)" +
-                    "LEFT OUTER JOIN nurse n ON (b.nurse_id = n.nurse_id)" +
-                    "JOIN room r ON (b.roomno = r.roomno) " + 
-                    "WHERE " + condition;
+        String sql = "SELECT * from bed b " +
+                "LEFT OUTER JOIN patient p ON (b.ssn = p.ssn) " +
+                "LEFT OUTER JOIN nurse n ON (b.nurse_id = n.nurse_id) " +
+                "JOIN room r ON (b.roomno = r.roomno) " + 
+                "WHERE " + condition;
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -198,7 +196,7 @@ public class BedDAO implements DAOInterface<Bed, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
             return beds;
 
         } catch (SQLException e) {

@@ -41,7 +41,9 @@
                 <Button fx:id="btnPatients" text="Patients" maxWidth="Infinity"
                         onAction="#showPatients"/>
                 <Button fx:id="btnPrescriptions" text="Prescriptions" maxWidth="Infinity"
-        onAction="#showPrescriptions"/>
+                        onAction="#showPrescriptions"/>
+                <Button fx:id="btnDiagnosis" text="Diagnosis" maxWidth="Infinity"
+                        onAction="#showDiagnosis"/>
 
 
                 <Separator/>

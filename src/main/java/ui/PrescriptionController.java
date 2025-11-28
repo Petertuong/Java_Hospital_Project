@@ -8,6 +8,7 @@ import service.TreatmentService.PrescriptionService;
 import service.FacilityService.MedicineService;
 import service.PersonService.PatientService;
 import service.PersonService.DoctorService;
+import service.MultiService.TreatmentProtocolService;
 import ui.util.TableUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,6 +49,8 @@ public class PrescriptionController extends BaseController {
     private TableColumn<Prescription, String> colDosagePerDay;
     @FXML
     private TableColumn<Prescription, String> colNumberOfDay;
+    @FXML
+    private TableColumn<Prescription, String> colDescription;
 
     @FXML
     private Label lblMessage;
@@ -57,12 +60,14 @@ public class PrescriptionController extends BaseController {
     private final MedicineService medicineService = new MedicineService();
     private final PatientService patientService = new PatientService();
     private final DoctorService doctorService = new DoctorService();
+    private final TreatmentProtocolService treatmentProtocolService = new TreatmentProtocolService();
 
     @FXML
     public void initialize() {
         // ID không cho sửa
         if (txtTreatmentId != null) {
             txtTreatmentId.setEditable(false);
+            txtTreatmentId.setText("Auto");  // Show "Auto" for new prescription
         }
 
         TableUtil.setStringColumn(colTreatmentId, p -> String.valueOf(p.getTreatmentID()));
@@ -71,6 +76,7 @@ public class PrescriptionController extends BaseController {
         TableUtil.setStringColumn(colSSN, p -> p.getPatient() == null ? "" : p.getPatient().getSSN());
         TableUtil.setStringColumn(colDosagePerDay, p -> String.valueOf(p.getDosagePerDay()));
         TableUtil.setStringColumn(colNumberOfDay, p -> String.valueOf(p.getNumberOfDay()));
+        TableUtil.setStringColumn(colDescription, p -> p.getDescription() == null ? "" : p.getDescription());
 
         tblPrescriptions.setItems(data);
 
@@ -119,7 +125,9 @@ public class PrescriptionController extends BaseController {
     }
 
     private void clearForm() {
-        if (txtTreatmentId != null) txtTreatmentId.clear();
+        if (txtTreatmentId != null) {
+            txtTreatmentId.setText("Auto");  // Show "Auto" to indicate auto-generated ID
+        }
         txtDrugId.clear();
         txtDoctorId.clear();
         txtSSN.clear();
@@ -198,14 +206,38 @@ public class PrescriptionController extends BaseController {
             Doctor doc = doctorId == null ? null : doctorService.findDoctorByID(doctorId);
 
             Prescription pres = new Prescription(med, dosage, days, pat, doc, desc);
-            Prescription created = prescriptionService.addPrescription(pres);
-            if (created == null) {
-                showErrorAlert("Add Error", "Cannot add prescription.");
-                return;
+            
+            // Use TreatmentProtocolService to handle stock management
+            if (med != null) {
+                int originalStock = med.getQuantity();
+                int required = pres.getTotal();
+                
+                String result = treatmentProtocolService.prescribe(pres);
+                if ("Failed".equals(result)) {
+                    showErrorAlert("Stock Error", "Insufficient medicine stock!\n\n" +
+                        "Medicine: " + med.getDrugName() + "\n" +
+                        "Available: " + originalStock + "\n" +
+                        "Required: " + required + "\n" +
+                        "Shortage: " + (required - originalStock));
+                    return;
+                }
+                // Stock was automatically decreased, now get the created prescription from DB
+                loadPrescriptionsFromServer();
+                if (lblMessage != null) {
+                    lblMessage.setText("Prescription added successfully! Stock updated: " + 
+                        originalStock + " → " + (originalStock - required));
+                }
+            } else {
+                // No medicine specified, add prescription without stock check
+                Prescription created = prescriptionService.addPrescription(pres);
+                if (created == null) {
+                    showErrorAlert("Add Error", "Cannot add prescription.");
+                    return;
+                }
+                data.add(created);
+                tblPrescriptions.getSelectionModel().select(created);
+                if (lblMessage != null) lblMessage.setText("Prescription added successfully.");
             }
-            data.add(created);
-            tblPrescriptions.getSelectionModel().select(created);
-            if (lblMessage != null) lblMessage.setText("Prescription added successfully.");
         } catch (Exception e) {
             e.printStackTrace();
             showErrorAlert("Add Error", "Cannot add prescription.\n\n" + e.getMessage());
@@ -237,7 +269,7 @@ public class PrescriptionController extends BaseController {
         }
 
         try {
-            Medicine med = drugId == null ? null : medicineService.findMedicineByNo(drugId);
+            Medicine newMed = drugId == null ? null : medicineService.findMedicineByNo(drugId);
             Patient pat = patientService.findPatientById(txtSSN.getText().trim());
             if (pat == null) {
                 showErrorAlert("Update Error", "Patient with SSN not found: " + txtSSN.getText().trim());
@@ -245,9 +277,45 @@ public class PrescriptionController extends BaseController {
             }
             Doctor doc = doctorId == null ? null : doctorService.findDoctorByID(doctorId);
 
-            selected.setMedicine(med);
-            selected.setDPD(Integer.parseInt(txtDosagePerDay.getText().trim()));
-            selected.setNOD(Integer.parseInt(txtNumberOfDay.getText().trim()));
+            // Calculate stock change needed
+            int oldTotal = selected.getTotal(); // Current total amount
+            int newDosage = Integer.parseInt(txtDosagePerDay.getText().trim());
+            int newDays = Integer.parseInt(txtNumberOfDay.getText().trim());
+            int newTotal = newDosage * newDays;
+            
+            Medicine oldMed = selected.getMedicine();
+            boolean medicineChanged = (oldMed == null && newMed != null) || 
+                                    (oldMed != null && newMed == null) ||
+                                    (oldMed != null && newMed != null && oldMed.getDrugID() != newMed.getDrugID());
+            
+            // Handle stock changes
+            if (medicineChanged || oldTotal != newTotal) {
+                // Return old medicine stock if there was one
+                if (oldMed != null) {
+                    Medicine returnStock = new Medicine(oldMed.getDrugID(), oldMed.getDrugName(), oldTotal);
+                    medicineService.fillMedicineStock(returnStock);
+                }
+                
+                // Check and deduct new medicine stock if there is one
+                if (newMed != null) {
+                    int currentStock = medicineService.findMedicineByNo(newMed.getDrugID()).getQuantity();
+                    if (currentStock < newTotal) {
+                        showErrorAlert("Stock Error", "Insufficient medicine stock for update!\n\n" +
+                            "Medicine: " + newMed.getDrugName() + "\n" +
+                            "Available: " + currentStock + "\n" +
+                            "Required: " + newTotal + "\n" +
+                            "Shortage: " + (newTotal - currentStock));
+                        return;
+                    }
+                    Medicine deductStock = new Medicine(newMed.getDrugID(), newMed.getDrugName(), newTotal);
+                    medicineService.decreaseMedicineStock(deductStock);
+                }
+            }
+
+            // Update the prescription
+            selected.setMedicine(newMed);
+            selected.setDPD(newDosage);
+            selected.setNOD(newDays);
             selected.setPatient(pat);
             selected.setDoctor(doc);
             selected.setDescription(txtDescription.getText() == null ? "" : txtDescription.getText().trim());
@@ -258,7 +326,13 @@ public class PrescriptionController extends BaseController {
                 return;
             }
             loadPrescriptionsFromServer();
-            if (lblMessage != null) lblMessage.setText("Prescription updated successfully.");
+            if (lblMessage != null) {
+                if (medicineChanged || oldTotal != newTotal) {
+                    lblMessage.setText("Prescription updated successfully with stock adjusted.");
+                } else {
+                    lblMessage.setText("Prescription updated successfully.");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             showErrorAlert("Update Error", "Cannot update prescription.\n\n" + e.getMessage());
@@ -276,6 +350,13 @@ public class PrescriptionController extends BaseController {
         this.showConfirm("Delete Prescription", "Delete this prescription?").ifPresent(res -> {
             if (res == ButtonType.OK) {
                 try {
+                    // Return stock to medicine before deleting prescription
+                    Medicine med = selected.getMedicine();
+                    if (med != null) {
+                        Medicine returnStock = new Medicine(med.getDrugID(), med.getDrugName(), selected.getTotal());
+                        medicineService.fillMedicineStock(returnStock);
+                    }
+                    
                     Integer r = prescriptionService.deletePrescription(selected.getTreatmentID());
                     if (r == null || r < 0) {
                         showErrorAlert("Delete Error", "Cannot delete prescription.");
@@ -283,7 +364,13 @@ public class PrescriptionController extends BaseController {
                     }
                     data.remove(selected);
                     clearForm();
-                    if (lblMessage != null) lblMessage.setText("Prescription deleted successfully.");
+                    if (lblMessage != null) {
+                        if (med != null) {
+                            lblMessage.setText("Prescription deleted successfully. Stock returned: " + selected.getTotal());
+                        } else {
+                            lblMessage.setText("Prescription deleted successfully.");
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     showErrorAlert("Delete Error", "Cannot delete prescription.\n\n" + e.getMessage());

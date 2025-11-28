@@ -8,9 +8,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-public class DoctorController {
+public class DoctorController implements ReadOnlyController {
 
-    // ====== Form fields ======
+    private boolean readOnlyMode = false;
+
     @FXML
     private TextField txtId;               // read-only
     @FXML
@@ -24,7 +25,6 @@ public class DoctorController {
     @FXML
     private TextField txtQualification;
 
-    // ====== Buttons ======
     @FXML
     private Button btnAdd;
     @FXML
@@ -34,11 +34,9 @@ public class DoctorController {
     @FXML
     private Button btnClear;
 
-    // ====== Message ======
     @FXML
     private Label lblMessage;
 
-    // ====== Table ======
     @FXML
     private TableView<Doctor> doctorTable;
     @FXML
@@ -54,13 +52,8 @@ public class DoctorController {
     @FXML
     private TableColumn<Doctor, String> colQualification;
 
-    // ====== Service & Data ======
     private final DoctorService doctorService = new DoctorService();
     private final ObservableList<Doctor> data = FXCollections.observableArrayList();
-
-    // ---------------------------------------------------------
-    // init
-    // ---------------------------------------------------------
     @FXML
     public void initialize() {
         // ComboBox: gender
@@ -109,9 +102,35 @@ public class DoctorController {
         loadDoctorsFromServer();
     }
 
-    // ---------------------------------------------------------
+    // Read-Only Mode Implementation
+
+    @Override
+    public void setReadOnlyMode(boolean readOnly) {
+        this.readOnlyMode = readOnly;
+        
+        if (readOnly) {
+            // STAFF MODE: READ-ONLY access
+            btnAdd.setDisable(true);
+            btnUpdate.setDisable(true);
+            btnDelete.setDisable(true);
+            btnClear.setDisable(true);
+            
+            txtName.setEditable(false);
+            txtPhone.setEditable(false);
+            cbGender.setDisable(true);
+            cbSpecialization.setDisable(true);
+            txtQualification.setEditable(false);
+            
+            lblMessage.setText("READ-ONLY MODE: Staff can view but not modify doctor data");
+            lblMessage.setStyle("-fx-text-fill: #2c3e50; -fx-font-style: italic;");
+        } else {
+            // 👑 ADMIN MODE: FULL access
+            lblMessage.setText("");
+        }
+    }
+
     // Map gender
-    // ---------------------------------------------------------
+
     private char mapGenderTextToChar(String text) {
     if ("Female".equals(text)) {
         return 'F';
@@ -125,9 +144,8 @@ private String mapGenderCharToText(char c) {
     return "Male";   // mặc định
 }
 
-    // ---------------------------------------------------------
     // Load from backend
-    // ---------------------------------------------------------
+
     private void loadDoctorsFromServer() {
         try {
             java.util.ArrayList<Doctor> serverData = doctorService.listDoctor();
@@ -142,9 +160,8 @@ private String mapGenderCharToText(char c) {
         updateButtonsState();
     }
 
-    // ---------------------------------------------------------
     // Show in form
-    // ---------------------------------------------------------
+
     private void showDoctorDetails(Doctor d) {
         if (d == null) {
             clearForm();
@@ -162,9 +179,8 @@ private String mapGenderCharToText(char c) {
         updateButtonsState();
     }
 
-    // ---------------------------------------------------------
     // Clear form
-    // ---------------------------------------------------------
+
     private void clearForm() {
         txtId.clear();
         txtName.clear();
@@ -183,18 +199,16 @@ private String mapGenderCharToText(char c) {
         clearForm();
     }
 
-    // ---------------------------------------------------------
     // Buttons enable/disable
-    // ---------------------------------------------------------
+
     private void updateButtonsState() {
         boolean selected = doctorTable.getSelectionModel().getSelectedItem() != null;
         btnUpdate.setDisable(!selected);
         btnDelete.setDisable(!selected);
     }
 
-    // ---------------------------------------------------------
     // Validation
-    // ---------------------------------------------------------
+
     private String validateForm() {
         if (txtName.getText() == null || txtName.getText().trim().isEmpty()) {
             return "Name is required.";
@@ -223,9 +237,8 @@ private String mapGenderCharToText(char c) {
         return null;
     }
 
-    // ---------------------------------------------------------
     // Add Doctor
-    // ---------------------------------------------------------
+
     @FXML
     private void handleAddDoctor() {
         String error = validateForm();
@@ -246,9 +259,8 @@ private String mapGenderCharToText(char c) {
         }
     }
 
-    // ---------------------------------------------------------
     // Update Doctor
-    // ---------------------------------------------------------
+
     @FXML
     private void handleUpdateDoctor() {
         Doctor selected = doctorTable.getSelectionModel().getSelectedItem();
@@ -278,9 +290,8 @@ private String mapGenderCharToText(char c) {
         }
     }
 
-    // ---------------------------------------------------------
     // Delete Doctor
-    // ---------------------------------------------------------
+
     @FXML
     private void handleDeleteDoctor() {
         Doctor selected = doctorTable.getSelectionModel().getSelectedItem();
@@ -311,9 +322,6 @@ private String mapGenderCharToText(char c) {
         });
     }
 
-    // ---------------------------------------------------------
-    // Alert helper
-    // ---------------------------------------------------------
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

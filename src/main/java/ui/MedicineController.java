@@ -8,7 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-public class MedicineController extends BaseController {
+public class MedicineController extends BaseController implements ReadOnlyController {
+
+    private boolean readOnlyMode = false;
 
     @FXML
     private TextField txtId;
@@ -58,6 +60,30 @@ public class MedicineController extends BaseController {
 
         updateButtons();
         if (lblMessage != null) lblMessage.setText("");
+    }
+
+    // Read-Only Mode Implementation
+
+    @Override
+    public void setReadOnlyMode(boolean readOnly) {
+        this.readOnlyMode = readOnly;
+        
+        if (readOnly) {
+            // STAFF MODE: READ-ONLY access
+            btnAdd.setDisable(true);
+            btnUpdate.setDisable(true);
+            btnDelete.setDisable(true);
+            btnClear.setDisable(true);
+            
+            txtName.setEditable(false);
+            txtStock.setEditable(false);
+            
+            lblMessage.setText("READ-ONLY MODE: Staff can view but not modify medicine data");
+            lblMessage.setStyle("-fx-text-fill: #2c3e50; -fx-font-style: italic;");
+        } else {
+            // 👑 ADMIN MODE: FULL access
+            lblMessage.setText("");
+        }
     }
 
     private void loadMedicinesFromServer() {

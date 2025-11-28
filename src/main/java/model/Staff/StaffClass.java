@@ -8,15 +8,14 @@ public class StaffClass extends Person {
 	private String Specialization;
 
 	public StaffClass(){
-		//default constructor
 	}
-	//constructor for loading new object
+	//load
 	public StaffClass(String name, String number, char gender, int SID, String Spec){
 		super(name, number, gender);
 		this.SID = SID;
 		this.Specialization = Spec;
 	}
-	//overloading constructor for creating new object without SID
+	//create
 	public StaffClass(String name, String number, char gender, String Spec){
 		super(name, number, gender);
 		this.Specialization = Spec;

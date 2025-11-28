@@ -62,7 +62,9 @@
         <DatePicker fx:id="dpDOB"
                     GridPane.rowIndex="4" GridPane.columnIndex="1"
                     GridPane.hgrow="ALWAYS"
-                    maxWidth="Infinity"/>
+                    maxWidth="Infinity"
+                    editable="true"
+                    promptText="dd/MM/yyyy"/>
 
         <!-- Address -->
         <Label text="Address:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
@@ -98,6 +100,13 @@
                     minWidth="80" onAction="#handleDeletePatient"/>
             <Button fx:id="btnClear"  text="Clear"
                     minWidth="80" onAction="#handleClearForm"/>
+            <Separator orientation="VERTICAL" />
+            <Button fx:id="btnAdmit" text="Admit"
+                    minWidth="80" onAction="#handleAdmitPatient"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+            <Button fx:id="btnDischarge" text="Discharge"
+                    minWidth="80" onAction="#handleDischargePatient"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
         </children>
     </HBox>
 

@@ -9,6 +9,10 @@ import  service.AbstractService;
 public class PrescriptionService extends AbstractService<PrescriptionDAO> implements IPrescriptionService{
 
     PrescriptionDAO prescriptiondao;
+    public PrescriptionService(){
+        super();
+        this.prescriptiondao = createEntityDAO();
+    }
     
     @Override
     public PrescriptionDAO createEntityDAO() {
@@ -51,7 +55,5 @@ public class PrescriptionService extends AbstractService<PrescriptionDAO> implem
         String condition = "ssn = " + ssn;
         return prescriptiondao.selectByCondition(condition);
     }
-
-
 
 }

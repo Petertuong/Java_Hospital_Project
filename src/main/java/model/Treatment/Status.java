@@ -1,10 +1,10 @@
 package  model.Treatment;
-
+//Khanh
 public enum Status {
 
 	Discharge("Discharged"),
 	Admit("Admitted"),
-	Null("null");
+	Null("Waiting"); 
 
 	private final String state;
 

@@ -30,7 +30,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
             System.out.println(rows + " row(s) inserted successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return t;
 
         } catch (SQLException e) {
@@ -41,9 +41,9 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
     @Override
     public Integer update(Medicine t) {
-       String sql = "UPDATE medicine " +
-                    "SET drugname = ?, quantity = ?" + 
-                    "WHERE drug_id = ?";
+         String sql = "UPDATE medicine " +
+                          "SET drugname = ?, quantity = ? " + 
+                          "WHERE drug_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -58,7 +58,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return 1;
 
         } catch (SQLException e) {
@@ -82,7 +82,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
             System.out.println(rows + " row(s) deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+
             return 1;
 
         } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
     @Override
     public ArrayList<Medicine> selectAll() {
         ArrayList<Medicine> meds = new ArrayList<>();
-        String sql = "SELECT * from room ";
+        String sql = "SELECT * from medicine ";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -113,7 +113,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
             return meds;
 
         } catch (SQLException e) {
@@ -125,7 +125,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
     @Override
     public Medicine selectById(Integer k) {
 
-        Medicine m = new Medicine();
+        Medicine m = null;
         String sql = "SELECT * from medicine WHERE drug_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -134,19 +134,12 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
- 
+            if (rs.next()) {
                 m = MapperUtil.mapMedicine(rs);
-
+                System.out.println("Retrieved medicine with drug_id = " + k + " successfully!");
             }
             
-            if(rs.wasNull()){
-                return null;
-            }
-            
-            System.out.println("Retrieved medicine with drug_id = " + k + " successfully!");
 
-            DBConnect.closeConnection(conn);
             return m;
 
         } catch (SQLException e) {
@@ -178,7 +171,7 @@ public class MedicineDAO implements DAOInterface<Medicine, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
             return meds;
 
         } catch (SQLException e) {

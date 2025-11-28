@@ -32,6 +32,4 @@ public class BedRoomService {
         return count;
     }
 
-
-
 }

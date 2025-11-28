@@ -9,7 +9,6 @@ public class Diagnosis {
 	private Patient patient;
 
 	public Diagnosis(){
-		//default constructor
 	}
 	
 	//create constructor
@@ -41,7 +40,6 @@ public class Diagnosis {
 	public String getResult(){
 		return Result;
 	}
-
 
     public int getDiag_id() {
         return diag_id;

@@ -30,12 +30,12 @@ public class Bed {
 		this.patient = null;
 		this.nurse = null;
 	}
-	
+	//compare equality
 	public boolean equals(Bed other){
 		return this.Room.equals(other.Room) && 
-				this.BedNo.equals(other.BedNo) &&
-				this.patient.equals(other.patient);
+				this.BedNo.equals(other.BedNo);
 	}
+
 	public Room getRoom() {
 		return Room;
 	}
@@ -60,11 +60,9 @@ public class Bed {
 		IsOccupied = isOccupied;
 	}
 
-
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
 
 	public void setNurse(Nurse nurse) {
 		this.nurse = nurse;

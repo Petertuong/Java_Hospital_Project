@@ -10,9 +10,8 @@ import  dao.DAOInterface;
 import  dao.MapperUtil;
 import  model.Treatment.Prescription;
 import  util.DBConnect;
-
+//Tuong
 public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
-
 
     @Override
     public Prescription create(Prescription t) {
@@ -23,9 +22,21 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
             int idx=1;
 
             ps.setString(idx++, t.getDescription());
-            ps.setInt(idx++, t.getDoctor().getSID());
+            
+            if (t.getDoctor() != null) {
+                ps.setInt(idx++, t.getDoctor().getSID());
+            } else {
+                ps.setNull(idx++, java.sql.Types.INTEGER);
+            }
+            
             ps.setInt(idx++, t.getDosagePerDay());
-            ps.setInt(idx++, t.getMedicine().getDrugID());
+            
+            if (t.getMedicine() != null) {
+                ps.setInt(idx++, t.getMedicine().getDrugID());
+            } else {
+                ps.setNull(idx++, java.sql.Types.INTEGER);
+            }
+            
             ps.setInt(idx++, t.getNumberOfDay());
             ps.setString(idx, t.getPatient().getSSN());
 
@@ -35,7 +46,7 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
 
             System.out.println(rows + " row(s) inserted successfully!");
 
-            DBConnect.closeConnection(conn);
+
 
             return t;
 
@@ -48,7 +59,7 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
     @Override
     public Integer update(Prescription t) {
        String sql = "UPDATE prescription " +
-                    "SET description = ?, dosage_per_day = ?, drug_id = ?, number_of_day = ?" + 
+                    "SET description = ?, dosage_per_day = ?, drug_id = ?, number_of_day = ? " + 
                     "WHERE treatment_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -56,10 +67,16 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
             int idx = 1;
             ps.setString(idx++, t.getDescription());
             ps.setInt(idx++, t.getDosagePerDay());
-            ps.setInt(idx++, t.getMedicine().getDrugID());
+            
+            // Handle null medicine
+            if (t.getMedicine() != null) {
+                ps.setInt(idx++, t.getMedicine().getDrugID());
+            } else {
+                ps.setNull(idx++, java.sql.Types.INTEGER);
+            }
+            
             ps.setInt(idx++, t.getNumberOfDay());
             ps.setInt(idx, t.getTreatmentID());
-
 
             int rows = ps.executeUpdate();
 
@@ -67,7 +84,7 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
 
             System.out.println(rows + " row(s) updated successfully!");
 
-            DBConnect.closeConnection(conn);
+
 
             return 1;
 
@@ -92,7 +109,7 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
 
             System.out.println(rows + " row(s) deleted successfully!");
 
-            DBConnect.closeConnection(conn);
+
 
             return 1;
 
@@ -106,9 +123,9 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
     public ArrayList<Prescription> selectAll() {
         ArrayList<Prescription> prescriptions = new ArrayList<>();
         String sql = "SELECT * from prescription pr " +
-                    "JOIN doctor d ON (d.doctor_id = pr.doctor_id)" +
-                    "JOIN patient p ON (p.ssn = pr.ssn)" +
-                    "JOIN medicine m ON (m.drug_id = pr.drug_id)";
+                    "LEFT JOIN doctor d ON (d.doctor_id = pr.doctor_id) " +
+                    "LEFT JOIN patient p ON (p.ssn = pr.ssn) " +
+                    "LEFT JOIN medicine m ON (m.drug_id = pr.drug_id)";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -127,7 +144,7 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
 
             return prescriptions;
 
@@ -142,9 +159,9 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
 
         Prescription pr = new Prescription();
         String sql = "SELECT * from prescription pr " +
-                    "JOIN doctor d ON (d.doctor_id = pr.doctor_id)" +
-                    "JOIN patient p ON (p.ssn = pr.ssn)" +
-                    "JOIN medicine m ON (m.drug_id = pr.drug_id)" +
+                    "LEFT JOIN doctor d ON (d.doctor_id = pr.doctor_id) " +
+                    "LEFT JOIN patient p ON (p.ssn = pr.ssn) " +
+                    "LEFT JOIN medicine m ON (m.drug_id = pr.drug_id) " +
                     "WHERE treatment_id = ?";
         try (Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -163,7 +180,7 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
             }            
             System.out.println("Retrieved prescription with treatment_id = " + k + " successfully!");
 
-            DBConnect.closeConnection(conn);
+
 
             return pr;
 
@@ -199,7 +216,7 @@ public class PrescriptionDAO implements DAOInterface<Prescription, Integer> {
 
             System.out.println(count + " row(s) retrieved!");
 
-            DBConnect.closeConnection(conn);
+
 
             return prescriptions;
 

@@ -15,6 +15,7 @@ public class PatientService extends AbstractService<PatientDAO> implements IPati
 
 	public PatientService(){
 		super();
+		this.patientdao = createEntityDAO();
 	}
 
 	@Override

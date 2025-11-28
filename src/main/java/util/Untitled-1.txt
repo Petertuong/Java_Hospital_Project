@@ -1,0 +1,2 @@
+cd "C:\NetBeansProjects\Java_Hospital_Project-branch01\Java_Hospital_Project-branch01"
+.\run-local.ps1

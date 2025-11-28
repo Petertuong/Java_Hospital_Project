@@ -3,10 +3,6 @@ package ui;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Simple in-memory auth service.
- * Later you will replace this with real database.
- */
 public class AuthService {
 
     private static final Map<String, String> USERS = new HashMap<>();
