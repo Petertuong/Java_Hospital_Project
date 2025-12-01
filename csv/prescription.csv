@@ -1,0 +1,4 @@
+﻿treatment_id,drug_id,doctor_id,ssn,dosage_per_day,number_of_day,description
+7,15,8,123456789003,3,7,"Uống 1 viên/lần, ngày 3 lần trước ăn"
+8,16,7,123456789005,2,3,"Uống khi đau, tối đa 2 lần/ngày"
+17,17,9,123456789002,3,5,"Uống 1 viên/lần, ngày 3 lần trước ăn"

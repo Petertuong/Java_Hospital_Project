@@ -7,6 +7,7 @@ public class Doctor extends StaffClass {
 	public Doctor(){
 
 	}
+
 	//creating new doctor object
 	public Doctor(String name, String number, char gender, String Specification, String Qualification){
 		super(name, number, gender, Specification);

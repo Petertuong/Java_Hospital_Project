@@ -8,7 +8,7 @@ import  service.AbstractService;
 
 public class MedicineService extends AbstractService<MedicineDAO> implements IMedicineService{
 
-    MedicineDAO medicinedao;
+    private MedicineDAO medicinedao;
 
     public MedicineService(){
 		super();

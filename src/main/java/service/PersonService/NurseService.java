@@ -8,7 +8,7 @@ import  service.AbstractService;
 
 public class NurseService extends AbstractService<NurseDAO> implements INurseService {
 
-    NurseDAO nursedao;
+    private NurseDAO nursedao;
 	public NurseService(){
         super();
         this.nursedao = createEntityDAO();

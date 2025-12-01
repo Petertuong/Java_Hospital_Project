@@ -8,7 +8,7 @@ import  service.AbstractService;
 
 public class DoctorService extends AbstractService<DoctorDAO> implements IDoctorService {
 
-	DoctorDAO doctordao;
+	private DoctorDAO doctordao;
 
 	public DoctorService(){
         super();

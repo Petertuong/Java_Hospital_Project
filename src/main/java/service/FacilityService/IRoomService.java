@@ -25,4 +25,3 @@ public interface IRoomService {
     public Integer updateRoom(Room room);
 
 }
-//bedsavaible is just the number of bed in a room

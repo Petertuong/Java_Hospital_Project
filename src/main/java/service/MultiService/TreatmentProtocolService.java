@@ -7,8 +7,8 @@ import service.TreatmentService.PrescriptionService;
 
 public class TreatmentProtocolService{
 
-    PrescriptionService prescriptionS;
-    MedicineService medicineS;
+    private PrescriptionService prescriptionS;
+    private MedicineService medicineS;
     
     public TreatmentProtocolService(){
         prescriptionS = new PrescriptionService();

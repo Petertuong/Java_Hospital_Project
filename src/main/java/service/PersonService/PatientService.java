@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 public class PatientService extends AbstractService<PatientDAO> implements IPatientService{
     
-	PatientDAO patientdao;
+	private PatientDAO patientdao;
 
 	public PatientService(){
 		super();

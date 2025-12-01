@@ -12,3 +12,4 @@ public abstract class AbstractService<EntityDAO> {
     public abstract EntityDAO createEntityDAO();
 
 }
+

@@ -1,0 +1,8 @@
+﻿ssn,fullname,gender,dob,phoneno,address,emergency_contact,status
+123456789001,Nguyễn Văn An,M,1990-01-15,091234567,"123 Đường Lê Lợi, Q1, HCKJ",098765432,Admitted
+123456789002,Trần Thị Bình,F,1985-05-20,092345678,"456 Đường Nguyễn Huệ, Q1, HCM",087654321,Admitted
+123456789003,Lê Văn Cường,M,1978-12-10,093456789,"789 Đường Hai Bà Trưng, Q3, HCM",076543210,Discharged
+123456789004,Phạm Thị Dung,F,1992-08-03,094567890,"321 Đường Võ Văn Tần, Q1, HCM",065432109,Discharged
+123456789005,Hoàng Văn Em,M,1988-03-25,095678901,"654 Đường Pasteur, Q3, HCM",054321098,Discharged
+123456789006,Lê Đức Khuê,M,2005-09-15,081573150,Q7,081573151,Waiting
+123456789007,Nguyễn Quốc Khánh,M,,033521531,456 YT,033521532,Admitted

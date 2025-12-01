@@ -1,0 +1,8 @@
+﻿bedno,roomno,is_occupied,ssn,nurse_id
+1001,101,true,123456789001,7
+1002,101,true,123456789002,8
+1003,102,true,123456789007,9
+1004,102,false,,
+1005,103,false,,
+2001,201,false,,
+2002,201,false,,

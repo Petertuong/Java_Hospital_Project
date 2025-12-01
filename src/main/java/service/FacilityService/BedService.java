@@ -8,7 +8,7 @@ import  service.AbstractService;
 
 public class BedService extends AbstractService<BedDAO> implements IBedService {
 
-    BedDAO beddao;
+    private BedDAO beddao;
 
     public BedService(){
 		super();

@@ -8,7 +8,7 @@ import  service.AbstractService;;
 
 public class DiagnosisService extends AbstractService<DiagnosisDAO> implements IDiagnosisService{
 
-    DiagnosisDAO diagnosisdao;
+    private DiagnosisDAO diagnosisdao;
 
     public DiagnosisService(){
         super();
